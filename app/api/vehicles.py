@@ -1,5 +1,5 @@
-from fastapi import APIRouter, Depends, status, HTTPException
-from typing import List
+from fastapi import APIRouter, Depends, status, HTTPException, Query
+from typing import List, Optional
 from app.core.dependencies import get_current_user, get_current_admin, get_vehicle_service
 from app.schemas.vehicle_schema import VehicleCreate, VehicleUpdate, VehicleResponse
 from app.services.vehicle_service import VehicleService
@@ -29,6 +29,23 @@ def get_vehicles(
 ):
     """Get all vehicles. Requires authentication."""
     return service.list_vehicles()
+
+@router.get("/search", response_model=List[VehicleResponse])
+def search_vehicles(
+    make: Optional[str] = Query(None, min_length=1, description="Search by make"),
+    model: Optional[str] = Query(None, min_length=1, description="Search by model"),
+    category: Optional[str] = Query(None, min_length=1, description="Search by category"),
+    min_price: Optional[float] = Query(None, ge=0, description="Minimum price"),
+    max_price: Optional[float] = Query(None, ge=0, description="Maximum price"),
+    available: Optional[bool] = Query(None, description="Only show available vehicles"),
+    service: VehicleService = Depends(get_vehicle_service),
+    user=Depends(get_current_user)
+):
+    """Search vehicles by dynamic filters. Requires authentication."""
+    try:
+        return service.search_vehicles(make, model, category, min_price, max_price, available)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 @router.get("/{id}", response_model=VehicleResponse)
 def get_vehicle(

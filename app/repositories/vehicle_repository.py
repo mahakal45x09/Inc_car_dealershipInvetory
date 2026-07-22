@@ -23,6 +23,32 @@ class VehicleRepository:
         """Retrieve all vehicles."""
         return self.db.query(Vehicle).all()
 
+    def search_vehicles(
+        self,
+        make: Optional[str] = None,
+        model: Optional[str] = None,
+        category: Optional[str] = None,
+        min_price: Optional[float] = None,
+        max_price: Optional[float] = None,
+        available: Optional[bool] = None
+    ) -> List[Vehicle]:
+        """Search vehicles by optional filters dynamically."""
+        filters = []
+        if make:
+            filters.append(Vehicle.make.ilike(f"%{make}%"))
+        if model:
+            filters.append(Vehicle.model.ilike(f"%{model}%"))
+        if category:
+            filters.append(Vehicle.category.ilike(f"%{category}%"))
+        if min_price is not None:
+            filters.append(Vehicle.price >= min_price)
+        if max_price is not None:
+            filters.append(Vehicle.price <= max_price)
+        if available:
+            filters.append(Vehicle.quantity > 0)
+            
+        return self.db.query(Vehicle).filter(*filters).all()
+
     def get_by_id(self, vehicle_id: int) -> Optional[Vehicle]:
         """Fetch a vehicle by its primary key."""
         return self.db.query(Vehicle).filter(Vehicle.id == vehicle_id).first()

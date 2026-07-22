@@ -9,7 +9,7 @@ class Vehicle(Base):
     make = Column(String, index=True)
     model = Column(String, index=True)
     category = Column(String, index=True)
-    price = Column(Float)
+    price = Column(Float, index=True)
     quantity = Column(Integer)
     description = Column(String, nullable=True)
     image_url = Column(String, nullable=True)

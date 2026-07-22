@@ -2,7 +2,7 @@ import pytest
 from fastapi.testclient import TestClient
 
 def get_auth_headers(client: TestClient, is_admin: bool = False) -> dict:
-    email = "admin_search@example.com" if is_admin else "user_search@example.com"
+    email = "admin@example.com" if is_admin else "user_search@example.com"
     client.post("/api/auth/register", json={"email": email, "password": "securepassword123"})
     res = client.post("/api/auth/login", json={"email": email, "password": "securepassword123"})
     token = res.json().get("access_token", "dummy_token")
@@ -23,7 +23,7 @@ def seed_vehicles(client: TestClient):
 
 def test_search_by_make(client: TestClient, seed_vehicles):
     headers = get_auth_headers(client, is_admin=False)
-    response = client.get("/api/vehicles?make=Toyota", headers=headers)
+    response = client.get("/api/vehicles/search?make=Toyota", headers=headers)
     assert response.status_code == 200
     data = response.json()
     assert len(data) == 2
@@ -31,7 +31,7 @@ def test_search_by_make(client: TestClient, seed_vehicles):
 
 def test_search_by_model(client: TestClient, seed_vehicles):
     headers = get_auth_headers(client, is_admin=False)
-    response = client.get("/api/vehicles?model=Civic", headers=headers)
+    response = client.get("/api/vehicles/search?model=Civic", headers=headers)
     assert response.status_code == 200
     data = response.json()
     assert len(data) == 1
@@ -39,7 +39,7 @@ def test_search_by_model(client: TestClient, seed_vehicles):
 
 def test_search_by_category(client: TestClient, seed_vehicles):
     headers = get_auth_headers(client, is_admin=False)
-    response = client.get("/api/vehicles?category=Truck", headers=headers)
+    response = client.get("/api/vehicles/search?category=Truck", headers=headers)
     assert response.status_code == 200
     data = response.json()
     assert len(data) == 1
@@ -47,7 +47,7 @@ def test_search_by_category(client: TestClient, seed_vehicles):
 
 def test_minimum_price(client: TestClient, seed_vehicles):
     headers = get_auth_headers(client, is_admin=False)
-    response = client.get("/api/vehicles?min_price=30000", headers=headers)
+    response = client.get("/api/vehicles/search?min_price=30000", headers=headers)
     assert response.status_code == 200
     data = response.json()
     assert len(data) == 2  # F-150 and Model 3
@@ -55,7 +55,7 @@ def test_minimum_price(client: TestClient, seed_vehicles):
 
 def test_maximum_price(client: TestClient, seed_vehicles):
     headers = get_auth_headers(client, is_admin=False)
-    response = client.get("/api/vehicles?max_price=23000", headers=headers)
+    response = client.get("/api/vehicles/search?max_price=23000", headers=headers)
     assert response.status_code == 200
     data = response.json()
     assert len(data) == 2  # Civic and Corolla
@@ -63,7 +63,7 @@ def test_maximum_price(client: TestClient, seed_vehicles):
 
 def test_price_range(client: TestClient, seed_vehicles):
     headers = get_auth_headers(client, is_admin=False)
-    response = client.get("/api/vehicles?min_price=21000&max_price=26000", headers=headers)
+    response = client.get("/api/vehicles/search?min_price=21000&max_price=26000", headers=headers)
     assert response.status_code == 200
     data = response.json()
     assert len(data) == 2  # Camry and Civic
@@ -71,7 +71,7 @@ def test_price_range(client: TestClient, seed_vehicles):
 
 def test_available_vehicles(client: TestClient, seed_vehicles):
     headers = get_auth_headers(client, is_admin=False)
-    response = client.get("/api/vehicles?available=true", headers=headers)
+    response = client.get("/api/vehicles/search?available=true", headers=headers)
     assert response.status_code == 200
     data = response.json()
     assert len(data) == 4  # All except Civic
@@ -79,7 +79,7 @@ def test_available_vehicles(client: TestClient, seed_vehicles):
 
 def test_combined_filters(client: TestClient, seed_vehicles):
     headers = get_auth_headers(client, is_admin=False)
-    response = client.get("/api/vehicles?make=Toyota&category=Sedan&max_price=22000", headers=headers)
+    response = client.get("/api/vehicles/search?make=Toyota&category=Sedan&max_price=22000", headers=headers)
     assert response.status_code == 200
     data = response.json()
     assert len(data) == 1  # Corolla
@@ -88,12 +88,12 @@ def test_combined_filters(client: TestClient, seed_vehicles):
 
 def test_no_result(client: TestClient, seed_vehicles):
     headers = get_auth_headers(client, is_admin=False)
-    response = client.get("/api/vehicles?make=Ferrari", headers=headers)
+    response = client.get("/api/vehicles/search?make=Ferrari", headers=headers)
     assert response.status_code == 200
     data = response.json()
     assert len(data) == 0
 
 def test_invalid_price(client: TestClient, seed_vehicles):
     headers = get_auth_headers(client, is_admin=False)
-    response = client.get("/api/vehicles?min_price=abc", headers=headers)
+    response = client.get("/api/vehicles/search?min_price=abc", headers=headers)
     assert response.status_code == 422
