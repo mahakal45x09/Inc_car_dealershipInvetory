@@ -10,6 +10,7 @@ from app.database.database import get_db
 # Import models so Base.metadata knows about them
 from app.models.user import User
 from app.models.vehicle import Vehicle
+from app.models.purchase import PurchaseHistory
 
 # Use an in-memory SQLite database for testing
 SQLALCHEMY_DATABASE_URL = "sqlite:///:memory:"
