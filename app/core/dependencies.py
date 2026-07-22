@@ -53,3 +53,21 @@ def get_current_user(
         )
     
     return user
+
+def get_current_admin(current_user: User = Depends(get_current_user)) -> User:
+    """
+    Dependency to ensure the current user has admin privileges.
+    For this kata, admin is hardcoded to 'admin@example.com'.
+    """
+    if current_user.email != "admin@example.com":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Not enough permissions"
+        )
+    return current_user
+
+from app.services.vehicle_service import VehicleService
+
+def get_vehicle_service(db: Session = Depends(get_db)) -> VehicleService:
+    """Dependency to inject the VehicleService."""
+    return VehicleService(db)

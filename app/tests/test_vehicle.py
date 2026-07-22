@@ -27,8 +27,13 @@ def test_get_all_vehicles(client: TestClient):
     assert isinstance(response.json(), list)
 
 def test_get_vehicle_by_id(client: TestClient):
+    admin_headers = get_auth_headers(client, is_admin=True)
+    payload = {"make": "Ford", "model": "Focus", "category": "Hatchback", "price": 20000.0, "quantity": 3}
+    res = client.post("/api/vehicles", json=payload, headers=admin_headers)
+    vehicle_id = res.json()["id"]
+    
     headers = get_auth_headers(client, is_admin=False)
-    response = client.get("/api/vehicles/1", headers=headers)
+    response = client.get(f"/api/vehicles/{vehicle_id}", headers=headers)
     assert response.status_code == 200
 
 def test_vehicle_not_found(client: TestClient):
@@ -37,23 +42,41 @@ def test_vehicle_not_found(client: TestClient):
     assert response.status_code == 404
 
 def test_update_vehicle_admin(client: TestClient):
-    headers = get_auth_headers(client, is_admin=True)
-    response = client.put("/api/vehicles/1", json={"price": 19000.0}, headers=headers)
+    admin_headers = get_auth_headers(client, is_admin=True)
+    payload = {"make": "Ford", "model": "Focus", "category": "Hatchback", "price": 20000.0, "quantity": 3}
+    res = client.post("/api/vehicles", json=payload, headers=admin_headers)
+    vehicle_id = res.json()["id"]
+
+    response = client.put(f"/api/vehicles/{vehicle_id}", json={"price": 19000.0}, headers=admin_headers)
     assert response.status_code == 200
 
 def test_update_vehicle_normal_user(client: TestClient):
+    admin_headers = get_auth_headers(client, is_admin=True)
+    payload = {"make": "Ford", "model": "Focus", "category": "Hatchback", "price": 20000.0, "quantity": 3}
+    res = client.post("/api/vehicles", json=payload, headers=admin_headers)
+    vehicle_id = res.json()["id"]
+
     headers = get_auth_headers(client, is_admin=False)
-    response = client.put("/api/vehicles/1", json={"price": 19000.0}, headers=headers)
+    response = client.put(f"/api/vehicles/{vehicle_id}", json={"price": 19000.0}, headers=headers)
     assert response.status_code == 403
 
 def test_delete_vehicle_admin(client: TestClient):
-    headers = get_auth_headers(client, is_admin=True)
-    response = client.delete("/api/vehicles/1", headers=headers)
+    admin_headers = get_auth_headers(client, is_admin=True)
+    payload = {"make": "Ford", "model": "Focus", "category": "Hatchback", "price": 20000.0, "quantity": 3}
+    res = client.post("/api/vehicles", json=payload, headers=admin_headers)
+    vehicle_id = res.json()["id"]
+
+    response = client.delete(f"/api/vehicles/{vehicle_id}", headers=admin_headers)
     assert response.status_code == 204
 
 def test_delete_vehicle_normal_user(client: TestClient):
+    admin_headers = get_auth_headers(client, is_admin=True)
+    payload = {"make": "Ford", "model": "Focus", "category": "Hatchback", "price": 20000.0, "quantity": 3}
+    res = client.post("/api/vehicles", json=payload, headers=admin_headers)
+    vehicle_id = res.json()["id"]
+
     headers = get_auth_headers(client, is_admin=False)
-    response = client.delete("/api/vehicles/1", headers=headers)
+    response = client.delete(f"/api/vehicles/{vehicle_id}", headers=headers)
     assert response.status_code == 403
 
 def test_validation_price(client: TestClient):
