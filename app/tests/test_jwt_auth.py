@@ -35,7 +35,7 @@ def test_access_with_valid_token(client):
 
 def test_expired_token(client):
     # Manually create an expired token
-    expired_token = create_access_token(data={"sub": "1"}, expires_delta=timedelta(seconds=-1))
+    expired_token = create_access_token(data={"sub": "1", "role": "USER"}, expires_delta=timedelta(seconds=-1))
     
     response = client.get(
         "/api/vehicles",
@@ -52,7 +52,7 @@ def test_wrong_authentication_scheme(client):
     assert response.status_code == 401
 
 def test_missing_bearer_prefix(client):
-    token = create_access_token(data={"sub": "1"})
+    token = create_access_token(data={"sub": "1", "role": "USER"})
     response = client.get(
         "/api/vehicles",
         headers={"Authorization": token}
@@ -61,7 +61,7 @@ def test_missing_bearer_prefix(client):
 
 def test_token_belongs_to_deleted_user(client):
     # Use an ID that shouldn't exist
-    token = create_access_token(data={"sub": "99999"})
+    token = create_access_token(data={"sub": "99999", "role": "USER"})
     
     response = client.get(
         "/api/vehicles",

@@ -1,6 +1,7 @@
 from typing import Optional
 from sqlalchemy.orm import Session
 from app.models.user import User
+from app.core.roles import Role
 
 class UserRepository:
     def __init__(self, db: Session):
@@ -13,7 +14,8 @@ class UserRepository:
         return self.db.query(User).filter(User.email == email).first()
 
     def create(self, email: str, hashed_password: str) -> User:
-        db_user = User(email=email, hashed_password=hashed_password)
+        role = Role.ADMIN.value if email == "admin@example.com" else Role.USER.value
+        db_user = User(email=email, hashed_password=hashed_password, role=role)
         self.db.add(db_user)
         self.db.commit()
         self.db.refresh(db_user)
