@@ -1,20 +1,23 @@
-from fastapi import APIRouter, Depends, status, HTTPException, Query
 from typing import List, Optional
-from app.core.dependencies import get_current_user, get_current_admin, get_vehicle_service
-from app.schemas.vehicle_schema import VehicleCreate, VehicleUpdate, VehicleResponse
-from app.services.vehicle_service import VehicleService
-from app.core.exceptions import VehicleNotFoundException, DuplicateVehicleException
 
-router = APIRouter(
-    prefix="/api/vehicles",
-    tags=["vehicles"]
-)
+from fastapi import APIRouter, Depends, HTTPException, Query, status
+
+from app.core.dependencies import (get_current_admin, get_current_user,
+                                   get_vehicle_service)
+from app.core.exceptions import (DuplicateVehicleException,
+                                 VehicleNotFoundException)
+from app.schemas.vehicle_schema import (VehicleCreate, VehicleResponse,
+                                        VehicleUpdate)
+from app.services.vehicle_service import VehicleService
+
+router = APIRouter(prefix="/api/vehicles", tags=["vehicles"])
+
 
 @router.post("", response_model=VehicleResponse, status_code=status.HTTP_201_CREATED)
 def add_vehicle(
-    vehicle: VehicleCreate, 
-    service: VehicleService = Depends(get_vehicle_service), 
-    admin=Depends(get_current_admin)
+    vehicle: VehicleCreate,
+    service: VehicleService = Depends(get_vehicle_service),
+    admin=Depends(get_current_admin),
 ):
     """Add a new vehicle to the inventory. Admin only."""
     try:
@@ -22,36 +25,43 @@ def add_vehicle(
     except DuplicateVehicleException as e:
         raise HTTPException(status_code=400, detail=str(e))
 
+
 @router.get("", response_model=List[VehicleResponse])
 def get_vehicles(
-    service: VehicleService = Depends(get_vehicle_service), 
-    user=Depends(get_current_user)
+    service: VehicleService = Depends(get_vehicle_service),
+    user=Depends(get_current_user),
 ):
     """Get all vehicles. Requires authentication."""
     return service.list_vehicles()
+
 
 @router.get("/search", response_model=List[VehicleResponse])
 def search_vehicles(
     make: Optional[str] = Query(None, min_length=1, description="Search by make"),
     model: Optional[str] = Query(None, min_length=1, description="Search by model"),
-    category: Optional[str] = Query(None, min_length=1, description="Search by category"),
+    category: Optional[str] = Query(
+        None, min_length=1, description="Search by category"
+    ),
     min_price: Optional[float] = Query(None, ge=0, description="Minimum price"),
     max_price: Optional[float] = Query(None, ge=0, description="Maximum price"),
     available: Optional[bool] = Query(None, description="Only show available vehicles"),
     service: VehicleService = Depends(get_vehicle_service),
-    user=Depends(get_current_user)
+    user=Depends(get_current_user),
 ):
     """Search vehicles by dynamic filters. Requires authentication."""
     try:
-        return service.search_vehicles(make, model, category, min_price, max_price, available)
+        return service.search_vehicles(
+            make, model, category, min_price, max_price, available
+        )
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
 
+
 @router.get("/{id}", response_model=VehicleResponse)
 def get_vehicle(
-    id: int, 
-    service: VehicleService = Depends(get_vehicle_service), 
-    user=Depends(get_current_user)
+    id: int,
+    service: VehicleService = Depends(get_vehicle_service),
+    user=Depends(get_current_user),
 ):
     """Get a specific vehicle by ID. Requires authentication."""
     try:
@@ -59,12 +69,13 @@ def get_vehicle(
     except VehicleNotFoundException as e:
         raise HTTPException(status_code=404, detail=str(e))
 
+
 @router.put("/{id}", response_model=VehicleResponse)
 def update_vehicle(
-    id: int, 
-    vehicle: VehicleUpdate, 
-    service: VehicleService = Depends(get_vehicle_service), 
-    admin=Depends(get_current_admin)
+    id: int,
+    vehicle: VehicleUpdate,
+    service: VehicleService = Depends(get_vehicle_service),
+    admin=Depends(get_current_admin),
 ):
     """Update a specific vehicle. Admin only."""
     try:
@@ -72,11 +83,12 @@ def update_vehicle(
     except VehicleNotFoundException as e:
         raise HTTPException(status_code=404, detail=str(e))
 
+
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_vehicle(
-    id: int, 
-    service: VehicleService = Depends(get_vehicle_service), 
-    admin=Depends(get_current_admin)
+    id: int,
+    service: VehicleService = Depends(get_vehicle_service),
+    admin=Depends(get_current_admin),
 ):
     """Delete a specific vehicle. Admin only."""
     try:

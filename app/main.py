@@ -1,5 +1,6 @@
 from fastapi import FastAPI
-from app.api import auth, vehicles, purchase, restock
+
+from app.api import auth, purchase, restock, vehicles
 
 app = FastAPI(title="Car Dealership API")
 
@@ -7,6 +8,7 @@ app.include_router(auth.router)
 app.include_router(vehicles.router)
 app.include_router(purchase.router)
 app.include_router(restock.router)
+
 
 @app.get("/")
 def read_root():

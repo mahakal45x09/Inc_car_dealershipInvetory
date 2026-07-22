@@ -1,13 +1,17 @@
 import logging
+from typing import List, Optional
+
 from sqlalchemy.orm import Session
+
+from app.core.exceptions import (DuplicateVehicleException,
+                                 VehicleNotFoundException)
+from app.models.vehicle import Vehicle
 from app.repositories.vehicle_repository import VehicleRepository
 from app.schemas.vehicle_schema import VehicleCreate, VehicleUpdate
-from app.core.exceptions import VehicleNotFoundException, DuplicateVehicleException
-from typing import List, Optional
-from app.models.vehicle import Vehicle
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
+
 
 class VehicleService:
     def __init__(self, db: Session):
@@ -16,9 +20,11 @@ class VehicleService:
     def add_vehicle(self, vehicle: VehicleCreate) -> Vehicle:
         """Add a new vehicle if it doesn't already exist."""
         if self.repository.get_by_make_model(vehicle.make, vehicle.model):
-            logger.warning(f"Attempted to add duplicate vehicle: {vehicle.make} {vehicle.model}")
+            logger.warning(
+                f"Attempted to add duplicate vehicle: {vehicle.make} {vehicle.model}"
+            )
             raise DuplicateVehicleException()
-        
+
         logger.info(f"Adding new vehicle: {vehicle.make} {vehicle.model}")
         return self.repository.create(vehicle)
 
@@ -34,15 +40,19 @@ class VehicleService:
         category: Optional[str] = None,
         min_price: Optional[float] = None,
         max_price: Optional[float] = None,
-        available: Optional[bool] = None
+        available: Optional[bool] = None,
     ) -> List[Vehicle]:
         """Search vehicles by multiple optional filters."""
         if min_price is not None and max_price is not None and min_price > max_price:
             logger.error(f"Invalid price range: {min_price} to {max_price}")
             raise ValueError("min_price cannot be greater than max_price")
-            
-        logger.info(f"Searching vehicles with filters - make:{make}, model:{model}, min_price:{min_price}, max_price:{max_price}")
-        return self.repository.search_vehicles(make, model, category, min_price, max_price, available)
+
+        logger.info(
+            f"Searching vehicles with filters - make:{make}, model:{model}, min_price:{min_price}, max_price:{max_price}"
+        )
+        return self.repository.search_vehicles(
+            make, model, category, min_price, max_price, available
+        )
 
     def get_vehicle(self, vehicle_id: int) -> Vehicle:
         """Fetch a specific vehicle by ID."""

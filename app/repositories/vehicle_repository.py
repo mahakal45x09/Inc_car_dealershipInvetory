@@ -1,7 +1,10 @@
+from typing import List, Optional
+
 from sqlalchemy.orm import Session
+
 from app.models.vehicle import Vehicle
 from app.schemas.vehicle_schema import VehicleCreate, VehicleUpdate
-from typing import List, Optional
+
 
 class VehicleRepository:
     def __init__(self, db: Session):
@@ -9,7 +12,11 @@ class VehicleRepository:
 
     def get_by_make_model(self, make: str, model: str) -> Optional[Vehicle]:
         """Fetch a vehicle by its exact make and model."""
-        return self.db.query(Vehicle).filter(Vehicle.make == make, Vehicle.model == model).first()
+        return (
+            self.db.query(Vehicle)
+            .filter(Vehicle.make == make, Vehicle.model == model)
+            .first()
+        )
 
     def create(self, vehicle: VehicleCreate) -> Vehicle:
         """Insert a new vehicle into the database."""
@@ -30,23 +37,23 @@ class VehicleRepository:
         category: Optional[str] = None,
         min_price: Optional[float] = None,
         max_price: Optional[float] = None,
-        available: Optional[bool] = None
+        available: Optional[bool] = None,
     ) -> List[Vehicle]:
         """Search vehicles by optional filters dynamically."""
         filters = []
         if make:
-            filters.append(Vehicle.make.ilike(f"%{make}%"))
+            filters.append(Vehicle.make.ilike(f"%{make}%"))  # type: ignore[arg-type]
         if model:
-            filters.append(Vehicle.model.ilike(f"%{model}%"))
+            filters.append(Vehicle.model.ilike(f"%{model}%"))  # type: ignore[arg-type]
         if category:
-            filters.append(Vehicle.category.ilike(f"%{category}%"))
+            filters.append(Vehicle.category.ilike(f"%{category}%"))  # type: ignore[arg-type]
         if min_price is not None:
-            filters.append(Vehicle.price >= min_price)
+            filters.append(Vehicle.price >= min_price)  # type: ignore[arg-type]
         if max_price is not None:
-            filters.append(Vehicle.price <= max_price)
+            filters.append(Vehicle.price <= max_price)  # type: ignore[arg-type]
         if available:
-            filters.append(Vehicle.quantity > 0)
-            
+            filters.append(Vehicle.quantity > 0)  # type: ignore[arg-type]
+
         return self.db.query(Vehicle).filter(*filters).all()
 
     def get_by_id(self, vehicle_id: int) -> Optional[Vehicle]:

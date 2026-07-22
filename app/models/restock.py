@@ -1,7 +1,10 @@
-from sqlalchemy import Column, Integer, DateTime, ForeignKey
-from sqlalchemy.orm import relationship
 from datetime import datetime, timezone
+
+from sqlalchemy import Column, DateTime, ForeignKey, Integer
+from sqlalchemy.orm import relationship
+
 from app.database.base import Base
+
 
 class RestockHistory(Base):
     __tablename__ = "restock_history"

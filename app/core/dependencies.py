@@ -1,21 +1,25 @@
+import logging
+
 from fastapi import Depends, HTTPException, status
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-from jose import JWTError, ExpiredSignatureError
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+from jose import ExpiredSignatureError, JWTError
 from sqlalchemy.orm import Session
-from app.database.database import get_db
-from app.repositories.user_repository import UserRepository
-from app.models.user import User
+
 from app.core.jwt import verify_access_token
 from app.core.roles import Role
-import logging
+from app.services.vehicle_service import VehicleService
+from app.database.database import get_db
+from app.models.user import User
+from app.repositories.user_repository import UserRepository
 
 logger = logging.getLogger(__name__)
 
 security = HTTPBearer(auto_error=False)
 
+
 def get_current_user(
     credentials: HTTPAuthorizationCredentials = Depends(security),
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
 ) -> User:
     """
     Dependency to get the current authenticated user.
@@ -27,12 +31,12 @@ def get_current_user(
             detail="Not authenticated",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    
+
     try:
         payload = verify_access_token(credentials.credentials)
         user_id = payload.get("sub")
         role = payload.get("role")
-        
+
         if user_id is None or role is None:
             logger.warning("JWT is missing required claims (sub or role)")
             raise HTTPException(
@@ -40,7 +44,7 @@ def get_current_user(
                 detail="Invalid token claims",
                 headers={"WWW-Authenticate": "Bearer"},
             )
-            
+
     except ExpiredSignatureError:
         logger.warning("Expired JWT token used")
         raise HTTPException(
@@ -55,10 +59,10 @@ def get_current_user(
             detail="Could not validate credentials",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    
+
     user_repo = UserRepository(db)
     user = user_repo.get_by_id(int(user_id))
-    
+
     if user is None:
         logger.warning(f"Authenticated user ID {user_id} not found in database")
         raise HTTPException(
@@ -66,13 +70,15 @@ def get_current_user(
             detail="User not found",
             headers={"WWW-Authenticate": "Bearer"},
         )
-        
+
     # Attach JWT role to the user object for the RoleChecker
     user.jwt_role = role
     return user
 
+
 class RoleChecker:
     """Reusable dependency class for Role-Based Access Control."""
+
     def __init__(self, allowed_roles: list[Role]):
         self.allowed_roles = allowed_roles
 
@@ -83,14 +89,13 @@ class RoleChecker:
                 f"but route requires one of {[r.value for r in self.allowed_roles]}."
             )
             raise HTTPException(
-                status_code=status.HTTP_403_FORBIDDEN,
-                detail="Not enough permissions"
+                status_code=status.HTTP_403_FORBIDDEN, detail="Not enough permissions"
             )
         return current_user
 
+
 get_current_admin = RoleChecker([Role.ADMIN])
 
-from app.services.vehicle_service import VehicleService
 
 def get_vehicle_service(db: Session = Depends(get_db)) -> VehicleService:
     """Dependency to inject the VehicleService."""

@@ -1,7 +1,10 @@
-from sqlalchemy import Column, Integer, Float, DateTime, ForeignKey
-from sqlalchemy.orm import relationship
 from datetime import datetime, timezone
+
+from sqlalchemy import Column, DateTime, Float, ForeignKey, Integer
+from sqlalchemy.orm import relationship
+
 from app.database.base import Base
+
 
 class PurchaseHistory(Base):
     __tablename__ = "purchase_history"

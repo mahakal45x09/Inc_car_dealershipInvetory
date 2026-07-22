@@ -1,6 +1,8 @@
-from pydantic import BaseModel, Field, ConfigDict
-from typing import Optional
 from datetime import datetime
+from typing import Optional
+
+from pydantic import BaseModel, ConfigDict, Field
+
 
 class VehicleBase(BaseModel):
     make: str
@@ -11,8 +13,10 @@ class VehicleBase(BaseModel):
     description: Optional[str] = None
     image_url: Optional[str] = None
 
+
 class VehicleCreate(VehicleBase):
     pass
+
 
 class VehicleUpdate(BaseModel):
     make: Optional[str] = None
@@ -22,6 +26,7 @@ class VehicleUpdate(BaseModel):
     quantity: Optional[int] = Field(None, ge=0)
     description: Optional[str] = None
     image_url: Optional[str] = None
+
 
 class VehicleResponse(VehicleBase):
     id: int

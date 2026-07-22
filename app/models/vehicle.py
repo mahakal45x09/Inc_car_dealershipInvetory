@@ -1,6 +1,8 @@
-from sqlalchemy import Column, Integer, String, Float, DateTime
+from sqlalchemy import Column, DateTime, Float, Integer, String
 from sqlalchemy.sql import func
+
 from app.database.base import Base
+
 
 class Vehicle(Base):
     __tablename__ = "vehicles"

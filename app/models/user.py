@@ -1,6 +1,8 @@
-from sqlalchemy import Column, Integer, String, Boolean
-from app.database.base import Base
+from sqlalchemy import Boolean, Column, Integer, String
+
 from app.core.roles import Role
+from app.database.base import Base
+
 
 class User(Base):
     __tablename__ = "users"
