@@ -11,6 +11,7 @@ from app.database.database import get_db
 from app.models.user import User
 from app.models.vehicle import Vehicle
 from app.models.purchase import PurchaseHistory
+from app.models.restock import RestockHistory
 
 # Use an in-memory SQLite database for testing
 SQLALCHEMY_DATABASE_URL = "sqlite:///:memory:"
