@@ -23,9 +23,9 @@ describe('VehicleCard Component', () => {
     render(<VehicleCard vehicle={mockVehicle} onPurchase={mockOnPurchase} />);
     
     expect(screen.getByText('Toyota Camry')).toBeInTheDocument();
-    expect(screen.getByText('Sedan')).toBeInTheDocument();
+    expect(screen.getByText(/Sedan/i)).toBeInTheDocument();
     expect(screen.getByText('$25,000.00')).toBeInTheDocument();
-    expect(screen.getByText('5 in stock')).toBeInTheDocument();
+    expect(screen.getByText(/5 Stock/i)).toBeInTheDocument();
     
     const img = screen.getByRole('img', { name: /toyota camry/i });
     expect(img).toHaveAttribute('src', mockVehicle.image_url);
@@ -57,6 +57,6 @@ describe('VehicleCard Component', () => {
     render(<VehicleCard vehicle={noImageVehicle} onPurchase={mockOnPurchase} />);
     
     const img = screen.getByRole('img', { name: /toyota camry/i });
-    expect(img).toHaveAttribute('src', expect.stringContaining('placeholder'));
+    expect(img).toHaveAttribute('src', expect.stringContaining('car1.jpg'));
   });
 });

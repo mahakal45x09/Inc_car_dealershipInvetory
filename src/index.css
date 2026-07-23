@@ -1,10 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Additional custom base styles can go here */
 @layer base {
   body {
-    @apply bg-gray-50 text-gray-900;
+    @apply bg-[#F8FAFC] text-[#111827] font-sans antialiased;
+    font-family: 'Inter', sans-serif;
   }
 }

@@ -56,7 +56,7 @@ describe('Login Component', () => {
   it('validates email input', async () => {
     renderWithProviders(<Login />);
     
-    const loginButton = screen.getByRole('button', { name: /login/i });
+    const loginButton = screen.getByRole('button', { name: /sign in/i });
     fireEvent.click(loginButton);
 
     expect(await screen.findByText(/email is required/i)).toBeInTheDocument();
@@ -68,7 +68,7 @@ describe('Login Component', () => {
     const emailInput = screen.getByLabelText(/email/i);
     fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
     
-    const loginButton = screen.getByRole('button', { name: /login/i });
+    const loginButton = screen.getByRole('button', { name: /sign in/i });
     fireEvent.click(loginButton);
 
     expect(await screen.findByText(/password is required/i)).toBeInTheDocument();
@@ -82,7 +82,7 @@ describe('Login Component', () => {
     fireEvent.change(screen.getByLabelText(/email/i), { target: { value: 'test@example.com' } });
     fireEvent.change(screen.getByLabelText(/password/i), { target: { value: 'password123' } });
     
-    fireEvent.click(screen.getByRole('button', { name: /login/i }));
+    fireEvent.click(screen.getByRole('button', { name: /sign in/i }));
 
     await waitFor(() => {
       expect(api.post).toHaveBeenCalledWith('/auth/login', expect.any(Object));
@@ -97,7 +97,7 @@ describe('Login Component', () => {
     fireEvent.change(screen.getByLabelText(/email/i), { target: { value: 'test@example.com' } });
     fireEvent.change(screen.getByLabelText(/password/i), { target: { value: 'password123' } });
     
-    fireEvent.click(screen.getByRole('button', { name: /login/i }));
+    fireEvent.click(screen.getByRole('button', { name: /sign in/i }));
 
     await waitFor(() => {
       expect(mockNavigate).toHaveBeenCalledWith('/dashboard');
@@ -114,7 +114,7 @@ describe('Login Component', () => {
     fireEvent.change(screen.getByLabelText(/email/i), { target: { value: 'test@example.com' } });
     fireEvent.change(screen.getByLabelText(/password/i), { target: { value: 'wrongpassword' } });
     
-    fireEvent.click(screen.getByRole('button', { name: /login/i }));
+    fireEvent.click(screen.getByRole('button', { name: /sign in/i }));
 
     expect(await screen.findByText(/invalid credentials/i)).toBeInTheDocument();
   });

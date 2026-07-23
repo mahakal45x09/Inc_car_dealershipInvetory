@@ -11,8 +11,8 @@ import AdminOverview from '../pages/Admin/AdminOverview';
 import Dashboard from '../pages/Dashboard/Dashboard';
 import PurchaseHistory from '../pages/Dashboard/PurchaseHistory';
 
-// Using placeholders for pages until they are implemented
-const Home = () => <div className="p-4">Home Page (Under Construction)</div>;
+import Home from '../pages/Home/Home';
+
 const NotFound = () => <div className="p-4">404 Not Found</div>;
 
 const AppRoutes = () => {

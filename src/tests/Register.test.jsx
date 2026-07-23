@@ -39,17 +39,17 @@ describe('Register Component', () => {
   it('renders register form correctly', () => {
     renderWithProviders(<Register />);
     
-    expect(screen.getByRole('heading', { name: /register/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /create account/i })).toBeInTheDocument();
     expect(screen.getByLabelText(/full name/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/^password/i)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /register/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /create account/i })).toBeInTheDocument();
   });
 
   it('validates required inputs', async () => {
     renderWithProviders(<Register />);
     
-    const registerButton = screen.getByRole('button', { name: /register/i });
+    const registerButton = screen.getByRole('button', { name: /create account/i });
     fireEvent.click(registerButton);
 
     expect(await screen.findByText(/full name is required/i)).toBeInTheDocument();
@@ -66,7 +66,7 @@ describe('Register Component', () => {
     fireEvent.change(screen.getByLabelText(/email/i), { target: { value: 'john@example.com' } });
     fireEvent.change(screen.getByLabelText(/^password/i), { target: { value: 'password123' } });
     
-    fireEvent.click(screen.getByRole('button', { name: /register/i }));
+    fireEvent.click(screen.getByRole('button', { name: /create account/i }));
 
     await waitFor(() => {
       expect(api.post).toHaveBeenCalledWith('/auth/register', {
@@ -89,7 +89,7 @@ describe('Register Component', () => {
     fireEvent.change(screen.getByLabelText(/email/i), { target: { value: 'duplicate@example.com' } });
     fireEvent.change(screen.getByLabelText(/^password/i), { target: { value: 'password123' } });
     
-    fireEvent.click(screen.getByRole('button', { name: /register/i }));
+    fireEvent.click(screen.getByRole('button', { name: /create account/i }));
 
     expect(await screen.findByText(/email already registered/i)).toBeInTheDocument();
   });
