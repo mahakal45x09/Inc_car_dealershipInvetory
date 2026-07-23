@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
+import { jwtDecode } from 'jwt-decode';
 import api from '../../utils/axios';
 import { motion } from 'framer-motion';
-import { Eye, EyeOff, Mail, Lock } from 'lucide-react';
+import { Eye, EyeOff, Mail, Lock, User, Settings } from 'lucide-react';
 import { FaChrome, FaGithub } from 'react-icons/fa';
 
 const Login = () => {
@@ -18,9 +19,15 @@ const Login = () => {
     try {
       setErrorMsg('');
       const response = await api.post('/auth/login', data);
-      const { access_token, user } = response.data;
-      login(access_token, user);
-      navigate('/dashboard');
+      const { access_token } = response.data;
+      login(access_token);
+      
+      const decoded = jwtDecode(access_token);
+      if (decoded.role?.toLowerCase() === 'admin') {
+        navigate('/admin');
+      } else {
+        navigate('/dashboard');
+      }
     } catch (err) {
       setErrorMsg(err.response?.data?.detail || 'Invalid email or password');
     }
@@ -133,16 +140,30 @@ const Login = () => {
 
           <div className="relative flex items-center py-5">
             <div className="flex-grow border-t border-gray-200"></div>
-            <span className="flex-shrink-0 mx-4 text-gray-400 text-sm font-medium">Or continue with</span>
+            <span className="flex-shrink-0 mx-4 text-gray-400 text-sm font-medium">Quick Login for Testing</span>
             <div className="flex-grow border-t border-gray-200"></div>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-            <button className="flex items-center justify-center gap-2 py-3 px-4 bg-white border border-gray-200 hover:border-gray-300 hover:bg-gray-50 rounded-xl text-sm font-bold text-gray-700 transition-colors shadow-sm">
-              <FaGithub className="w-5 h-5" /> GitHub
+            <button 
+              type="button"
+              onClick={() => {
+                document.getElementById('email').value = 'user@dealership.com';
+                document.getElementById('password').value = 'User@123!';
+              }}
+              className="flex items-center justify-center gap-2 py-3 px-4 bg-white border border-gray-200 hover:border-gray-300 hover:bg-gray-50 rounded-xl text-sm font-bold text-gray-700 transition-colors shadow-sm"
+            >
+              <User className="w-4 h-4" /> User Login
             </button>
-            <button className="flex items-center justify-center gap-2 py-3 px-4 bg-white border border-gray-200 hover:border-gray-300 hover:bg-gray-50 rounded-xl text-sm font-bold text-gray-700 transition-colors shadow-sm">
-              <FaChrome className="w-5 h-5 text-red-500" /> Google
+            <button 
+              type="button"
+              onClick={() => {
+                document.getElementById('email').value = 'admin@dealership.com';
+                document.getElementById('password').value = 'Admin@123!';
+              }}
+              className="flex items-center justify-center gap-2 py-3 px-4 bg-white border border-gray-200 hover:border-gray-300 hover:bg-gray-50 rounded-xl text-sm font-bold text-gray-700 transition-colors shadow-sm"
+            >
+              <Settings className="w-4 h-4" /> Admin Login
             </button>
           </div>
           

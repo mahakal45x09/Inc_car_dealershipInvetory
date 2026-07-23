@@ -28,7 +28,7 @@ const TopNavbar = () => {
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-100 flex h-20 items-center px-6 lg:px-12 transition-all">
       {/* Logo */}
       <Link to="/" className="flex items-center gap-3 mr-12 group">
-        <div className="w-10 h-10 rounded-2xl bg-primary-500 flex items-center justify-center shadow-lg shadow-primary-500/30 group-hover:scale-105 transition-transform">
+        <div className="w-10 h-10 rounded-2xl bg-orange-500 flex items-center justify-center shadow-lg shadow-orange-500/30 group-hover:scale-105 transition-transform">
           <Car className="w-6 h-6 text-white" />
         </div>
         <span className="text-2xl font-extrabold text-gray-900 tracking-tight">
@@ -40,36 +40,35 @@ const TopNavbar = () => {
       <nav className="flex-1 flex items-center gap-2">
         <NavLink to="/" label="Home" />
         <NavLink to="/inventory" label="Inventory" />
-        {user && user.role === 'ADMIN' && (
-          <NavLink to="/admin" label="Admin Dashboard" />
-        )}
       </nav>
 
       {/* Auth / User Section */}
       <div className="flex items-center gap-4">
-        {!user ? (
-          <>
-            <Link 
-              to="/login" 
-              className="px-6 py-2.5 text-sm font-bold text-gray-600 hover:text-gray-900 transition-colors"
-            >
-              Sign In
-            </Link>
-            <Link 
-              to="/register" 
-              className="px-6 py-2.5 bg-primary-500 hover:bg-primary-600 text-white text-sm font-bold rounded-xl shadow-lg shadow-primary-500/30 transition-all hover:-translate-y-0.5"
-            >
-              Register
-            </Link>
-          </>
+        {!user || location.pathname === '/login' || location.pathname === '/register' ? (
+          location.pathname !== '/login' && location.pathname !== '/register' && (
+            <>
+              <Link 
+                to="/login" 
+                className="px-6 py-2.5 text-sm font-bold text-gray-600 hover:text-gray-900 transition-colors"
+              >
+                Sign In
+              </Link>
+              <Link 
+                to="/register" 
+                className="px-6 py-2.5 bg-orange-500 hover:bg-orange-600 text-white text-sm font-bold rounded-xl shadow-lg shadow-orange-500/30 transition-all hover:-translate-y-0.5"
+              >
+                Register
+              </Link>
+            </>
+          )
         ) : (
           <div className="relative">
             <button 
               onClick={() => setShowDropdown(!showDropdown)}
               className="flex items-center gap-3 focus:outline-none bg-gray-50 hover:bg-gray-100 border border-gray-200 px-4 py-2 rounded-xl transition-all"
             >
-              <div className="w-8 h-8 rounded-full bg-primary-100 flex items-center justify-center border border-primary-200">
-                <span className="text-primary-600 font-bold text-sm">
+              <div className="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center border border-orange-200">
+                <span className="text-orange-600 font-bold text-sm">
                   {(user.email || user.username || 'U').charAt(0).toUpperCase()}
                 </span>
               </div>
@@ -92,19 +91,19 @@ const TopNavbar = () => {
                 >
                   <div className="px-5 py-3 border-b border-gray-100 mb-2 bg-gray-50/50">
                      <p className="text-sm font-bold text-gray-900 truncate">{(user.email || user.username || 'User').split('@')[0]}</p>
-                     <p className="text-xs font-medium text-gray-500 truncate">{user.role}</p>
+                     <p className="text-xs font-medium text-gray-500 truncate capitalize">{user.role}</p>
                   </div>
                   
-                  {user.role !== 'ADMIN' && (
+                  {user.role?.toLowerCase() !== 'admin' && (
                     <>
-                      <Link to="/dashboard" className="flex items-center gap-3 px-5 py-2.5 text-sm font-semibold text-gray-600 hover:text-primary-600 hover:bg-primary-50 transition-colors">
+                      <Link to="/dashboard" onClick={() => setShowDropdown(false)} className="flex items-center gap-3 px-5 py-2.5 text-sm font-semibold text-gray-600 hover:text-orange-600 hover:bg-orange-50 transition-colors">
                         <User className="w-4 h-4" />
                         My Dashboard
                       </Link>
                     </>
                   )}
                   
-                  <Link to="/settings" className="flex items-center gap-3 px-5 py-2.5 text-sm font-semibold text-gray-600 hover:text-primary-600 hover:bg-primary-50 transition-colors">
+                  <Link to="/settings" onClick={() => setShowDropdown(false)} className="flex items-center gap-3 px-5 py-2.5 text-sm font-semibold text-gray-600 hover:text-orange-600 hover:bg-orange-50 transition-colors">
                     <Settings className="w-4 h-4" />
                     Settings
                   </Link>
