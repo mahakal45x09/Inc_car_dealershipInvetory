@@ -100,7 +100,74 @@ npm run dev
 ### 3. Quick Login Testing
 You can test the application using the predefined accounts provided on the `/login` page:
 - **Admin:** `admin@dealership.com`
-- **User:** `user@dealership.com`
+- **pass:** `Admin@123!
+- **User**`First register your self and after login via home page
+
+  ## 🧪 Testing
+
+This project follows the **Test-Driven Development (TDD)** methodology using **pytest**.
+
+### Testing Frameworks
+
+- **pytest** – Unit and integration testing
+- **pytest-cov** – Test coverage reports
+- **FastAPI TestClient** – API endpoint testing
+- **SQLite Test Database** – Isolated testing environment
+
+---
+
+## Test Categories
+
+### Authentication Tests
+- ✅ User registration
+- ✅ Duplicate email validation
+- ✅ User login
+- ✅ Invalid credentials
+- ✅ JWT token generation
+- ✅ JWT authentication
+- ✅ Unauthorized access
+
+### Role-Based Access Control (RBAC)
+- ✅ Admin authorization
+- ✅ User authorization
+- ✅ Protected route testing
+- ✅ Invalid token handling
+
+### Vehicle Management Tests
+- ✅ Add vehicle
+- ✅ Get all vehicles
+- ✅ Update vehicle
+- ✅ Delete vehicle
+- ✅ Validation errors
+
+### Search Tests
+- ✅ Search by make
+- ✅ Search by model
+- ✅ Search by category
+- ✅ Search by price range
+- ✅ Empty search results
+
+### Inventory Tests
+- ✅ Purchase vehicle
+- ✅ Restock vehicle
+- ✅ Stock validation
+- ✅ Out-of-stock handling
+- ✅ Database transaction rollback
+
+### Integration Tests
+- ✅ Register → Login → Add Vehicle
+- ✅ Search → Purchase Vehicle
+- ✅ Admin Inventory Management
+- ✅ End-to-end API workflow
+
+---
+
+## Running Tests
+
+Run all tests
+
+```bash
+pytest
 
 # TDD Progress Log
 ## Phase 1: User Registration (RED Phase)
