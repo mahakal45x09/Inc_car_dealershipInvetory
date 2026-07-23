@@ -2,10 +2,10 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import MainLayout from '../layouts/MainLayout';
 import Login from '../pages/Login/Login';
+import Register from '../pages/Register/Register';
 
 // Using placeholders for pages until they are implemented
 const Home = () => <div className="p-4">Home Page</div>;
-const Register = () => <div className="p-4">Register Page</div>;
 const Dashboard = () => <div className="p-4">Dashboard</div>;
 const NotFound = () => <div className="p-4">404 Not Found</div>;
 
