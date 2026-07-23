@@ -6,7 +6,7 @@ import api from '../../utils/axios';
 import { useAuth } from '../../hooks/useAuth';
 
 const Login = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm();
   const [errorMsg, setErrorMsg] = useState('');
   const navigate = useNavigate();
   const { login } = useAuth();
@@ -16,16 +16,18 @@ const Login = () => {
     try {
       const response = await api.post('/auth/login', data);
       login(response.data.access_token);
+      toast.success('Successfully logged in!');
       navigate('/dashboard');
     } catch (err) {
-      const detail = err.response?.data?.detail || 'Invalid credentials';
+      const detail = err.response?.data?.detail || 'Invalid credentials. Please try again.';
       setErrorMsg(detail);
+      toast.error(detail);
     }
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-indigo-900">
-      <div className="w-full max-w-md p-10 space-y-6 rounded-3xl bg-white/10 backdrop-blur-xl shadow-2xl border border-white/20 text-white">
+    <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-indigo-900 p-4">
+      <div className="w-full max-w-md p-6 sm:p-10 space-y-6 rounded-3xl bg-white/10 backdrop-blur-xl shadow-2xl border border-white/20 text-white">
         <div className="text-center space-y-2">
           <h1 className="text-4xl font-extrabold tracking-tight">Login</h1>
           <p className="text-gray-300 text-sm">Sign in to your account to continue</p>
@@ -43,7 +45,13 @@ const Login = () => {
             <input 
               type="email" 
               id="email" 
-              {...register('email', { required: 'Email is required' })} 
+              {...register('email', { 
+                required: 'Email is required',
+                pattern: {
+                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                  message: 'Invalid email address'
+                }
+              })} 
               className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 focus:border-white/30 focus:bg-white/10 focus:outline-none focus:ring-2 focus:ring-indigo-400/50 transition-all text-white placeholder-white/30" 
               placeholder="name@example.com"
             />
@@ -54,14 +62,30 @@ const Login = () => {
             <input 
               type="password" 
               id="password" 
-              {...register('password', { required: 'Password is required' })} 
+              {...register('password', { 
+                required: 'Password is required',
+                minLength: {
+                  value: 6,
+                  message: 'Password must be at least 6 characters'
+                }
+              })} 
               className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 focus:border-white/30 focus:bg-white/10 focus:outline-none focus:ring-2 focus:ring-indigo-400/50 transition-all text-white placeholder-white/30" 
               placeholder="••••••••"
             />
             {errors.password && <p className="text-red-300 text-xs pl-1">{errors.password.message}</p>}
           </div>
-          <button type="submit" className="block w-full py-3.5 px-4 text-center rounded-xl text-white bg-indigo-500 hover:bg-indigo-400 focus:ring-4 focus:ring-indigo-500/50 transition-all font-semibold shadow-[0_0_15px_rgba(99,102,241,0.5)] hover:shadow-[0_0_25px_rgba(99,102,241,0.7)] transform hover:-translate-y-0.5">
-            Login
+          <button 
+            type="submit" 
+            disabled={isSubmitting}
+            className="block w-full py-3.5 px-4 text-center rounded-xl text-white bg-indigo-500 hover:bg-indigo-400 focus:ring-4 focus:ring-indigo-500/50 transition-all font-semibold shadow-[0_0_15px_rgba(99,102,241,0.5)] hover:shadow-[0_0_25px_rgba(99,102,241,0.7)] transform hover:-translate-y-0.5 disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none flex justify-center items-center gap-2"
+          >
+            {isSubmitting && (
+              <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+            )}
+            {isSubmitting ? 'Logging in...' : 'Login'}
           </button>
         </form>
       </div>
