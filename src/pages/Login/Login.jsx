@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
-import api from '../../services/api';
+import api from '../../utils/axios';
 import { motion } from 'framer-motion';
-import { Eye, EyeOff, Mail, Lock, Chrome, Github } from 'lucide-react';
+import { Eye, EyeOff, Mail, Lock } from 'lucide-react';
+import { FaChrome, FaGithub } from 'react-icons/fa';
 
 const Login = () => {
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm();
@@ -42,7 +43,7 @@ const Login = () => {
             transition={{ delay: 0.2, duration: 0.8 }}
           >
             <h2 className="text-4xl font-bold text-white mb-4">Drive your dream.</h2>
-            <p className="text-gray-300 text-lg max-w-md">Experience the pinnacle of automotive excellence with Motive's premium vehicle selection.</p>
+            <p className="text-gray-300 text-lg max-w-md">Experience the pinnacle of automotive excellence with AutoStock Pro's premium vehicle selection.</p>
           </motion.div>
         </div>
       </div>
@@ -138,10 +139,10 @@ const Login = () => {
 
           <div className="grid grid-cols-2 gap-4">
             <button className="flex items-center justify-center gap-2 py-3 px-4 bg-white border border-gray-200 hover:border-gray-300 hover:bg-gray-50 rounded-xl text-sm font-bold text-gray-700 transition-colors shadow-sm">
-              <Github className="w-5 h-5" /> GitHub
+              <FaGithub className="w-5 h-5" /> GitHub
             </button>
             <button className="flex items-center justify-center gap-2 py-3 px-4 bg-white border border-gray-200 hover:border-gray-300 hover:bg-gray-50 rounded-xl text-sm font-bold text-gray-700 transition-colors shadow-sm">
-              <Chrome className="w-5 h-5 text-red-500" /> Google
+              <FaChrome className="w-5 h-5 text-red-500" /> Google
             </button>
           </div>
           

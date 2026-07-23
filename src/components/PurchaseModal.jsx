@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import api from '../../services/api';
+import api from '../utils/axios';
 import toast from 'react-hot-toast';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, CheckCircle, Package, ShieldCheck, CreditCard } from 'lucide-react';

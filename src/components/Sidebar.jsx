@@ -41,7 +41,7 @@ const Sidebar = ({ isOpen }) => {
           <Car className="w-6 h-6 text-white" />
         </div>
         <span className="text-2xl font-bold text-gray-900 tracking-tight">
-          Motive
+          AutoStock Pro
         </span>
       </div>
 
@@ -53,6 +53,7 @@ const Sidebar = ({ isOpen }) => {
         {!user ? (
           <>
             <NavItem to="/" icon={Home} label="Home" />
+            <NavItem to="/inventory" icon={Car} label="Inventory" />
             <NavItem to="/login" icon={LogIn} label="Login" />
             <NavItem to="/register" icon={UserPlus} label="Register" />
           </>
@@ -66,6 +67,7 @@ const Sidebar = ({ isOpen }) => {
         ) : (
           <>
             <NavItem to="/dashboard" icon={LayoutDashboard} label="Dashboard" />
+            <NavItem to="/inventory" icon={Car} label="Inventory" />
             <NavItem to="/history" icon={History} label="Purchase History" />
           </>
         )}
