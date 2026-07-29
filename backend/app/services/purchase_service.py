@@ -77,4 +77,3 @@ class PurchaseService:
     def get_purchase_history(self, user_id: int):
         """Retrieve purchase history for a specific user."""
         return self.repository.get_history_by_user(user_id)
-

@@ -4,8 +4,6 @@ from sqlalchemy import Column, DateTime, Float, ForeignKey, Integer
 from sqlalchemy.orm import relationship
 
 from app.database.base import Base
-from app.models.user import User
-from app.models.vehicle import Vehicle
 
 
 class PurchaseHistory(Base):

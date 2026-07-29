@@ -93,11 +93,11 @@ const TopNavbar = () => {
                   className="absolute right-0 mt-3 w-56 bg-white rounded-2xl shadow-xl border border-gray-100 py-2 z-50 origin-top-right overflow-hidden"
                 >
                   <div className="px-5 py-3 border-b border-gray-100 mb-2 bg-gray-50/50">
-                     <p className="text-sm font-bold text-gray-900 truncate">{(user.email || user.username || 'User').split('@')[0]}</p>
-                     <p className="text-xs font-medium text-gray-500 truncate capitalize">{user.role}</p>
+                     <p className="text-sm font-bold text-gray-900 truncate">{(user?.email || user?.username || 'User').split('@')[0]}</p>
+                     <p className="text-xs font-medium text-gray-500 truncate capitalize">{user?.role || 'USER'}</p>
                   </div>
                   
-                  {user.role?.toUpperCase() === 'ADMIN' ? (
+                  {user?.role?.toUpperCase() === 'ADMIN' ? (
                     <Link to="/admin" onClick={() => setShowDropdown(false)} className="flex items-center gap-3 px-5 py-2.5 text-sm font-semibold text-orange-600 hover:bg-orange-50 transition-colors">
                       <Shield className="w-4 h-4" />
                       Admin Portal
@@ -109,7 +109,7 @@ const TopNavbar = () => {
                     </Link>
                   )}
                   
-                  <Link to="/settings" onClick={() => setShowDropdown(false)} className="flex items-center gap-3 px-5 py-2.5 text-sm font-semibold text-gray-600 hover:text-orange-600 hover:bg-orange-50 transition-colors">
+                  <Link to={user?.role?.toUpperCase() === 'ADMIN' ? "/admin/settings" : "/profile"} onClick={() => setShowDropdown(false)} className="flex items-center gap-3 px-5 py-2.5 text-sm font-semibold text-gray-600 hover:text-orange-600 hover:bg-orange-50 transition-colors">
                     <Settings className="w-4 h-4" />
                     Settings
                   </Link>

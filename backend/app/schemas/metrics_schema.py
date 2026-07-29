@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import List, Optional
+
 
 class AdminMetricsResponse(BaseModel):
     total_revenue: float

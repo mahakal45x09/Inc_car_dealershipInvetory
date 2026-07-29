@@ -10,10 +10,12 @@ class PurchaseResponse(BaseModel):
     vehicle_id: int
     remaining_quantity: int
 
+
 class VehicleBase(BaseModel):
     make: str
     model: str
     category: str
+
 
 class PurchaseHistoryItem(BaseModel):
     id: int
@@ -24,4 +26,3 @@ class PurchaseHistoryItem(BaseModel):
 
     class Config:
         from_attributes = True
-

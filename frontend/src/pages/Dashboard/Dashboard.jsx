@@ -22,9 +22,10 @@ const Dashboard = () => {
       try {
         setLoading(true);
         const response = await api.get('/purchase/history');
-        setHistory(response.data);
+        setHistory(Array.isArray(response.data) ? response.data : []);
       } catch (error) {
         console.error('Failed to fetch history', error);
+        setHistory([]);
       } finally {
         setLoading(false);
       }

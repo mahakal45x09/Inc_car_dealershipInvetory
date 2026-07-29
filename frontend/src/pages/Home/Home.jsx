@@ -25,9 +25,14 @@ export default function Home() {
       try {
         setLoading(true);
         const response = await api.get('/vehicles');
-        setFeaturedCars(response.data.slice(0, 3));
+        if (Array.isArray(response.data)) {
+          setFeaturedCars(response.data.slice(0, 3));
+        } else {
+          setFeaturedCars([]);
+        }
       } catch (error) {
         console.error('Error fetching vehicles:', error);
+        setFeaturedCars([]);
       } finally {
         setLoading(false);
       }
@@ -197,7 +202,7 @@ export default function Home() {
               [...Array(3)].map((_, i) => (
                 <div key={i} className="bg-white h-[450px] rounded-[2rem] animate-pulse border border-gray-100 shadow-sm"></div>
               ))
-            ) : featuredCars.length === 0 ? (
+            ) : !Array.isArray(featuredCars) || featuredCars.length === 0 ? (
                <div className="col-span-3 text-center py-12">
                  <p className="text-gray-500 font-medium">No featured vehicles available at the moment.</p>
                </div>

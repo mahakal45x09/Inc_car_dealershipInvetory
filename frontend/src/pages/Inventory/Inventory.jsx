@@ -17,10 +17,13 @@ const Inventory = () => {
       try {
         setLoading(true);
         const response = await api.get('/vehicles');
-        setAllVehicles(response.data);
-        setFilteredVehicles(response.data); // Initialize with all
+        const data = Array.isArray(response.data) ? response.data : [];
+        setAllVehicles(data);
+        setFilteredVehicles(data); // Initialize with all
       } catch (error) {
         console.error('Error fetching vehicles:', error);
+        setAllVehicles([]);
+        setFilteredVehicles([]);
       } finally {
         setLoading(false);
       }

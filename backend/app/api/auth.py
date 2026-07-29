@@ -1,8 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
-from app.core.exceptions import (InvalidCredentialsException,
-                                 UserAlreadyExistsException)
+from app.core.exceptions import InvalidCredentialsException, UserAlreadyExistsException
 from app.database.database import get_db
 from app.schemas.auth_schema import LoginRequest
 from app.schemas.user import UserCreate, UserResponse

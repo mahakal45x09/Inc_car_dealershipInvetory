@@ -9,7 +9,7 @@ import { Eye, EyeOff, Mail, Lock, User, Settings } from 'lucide-react';
 import { FaChrome, FaGithub } from 'react-icons/fa';
 
 const Login = () => {
-  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm();
+  const { register, handleSubmit, setValue, formState: { errors, isSubmitting } } = useForm();
   const [errorMsg, setErrorMsg] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
@@ -18,7 +18,11 @@ const Login = () => {
   const onSubmit = async (data) => {
     try {
       setErrorMsg('');
-      const response = await api.post('/auth/login', data);
+      const payload = {
+        email: data.email?.trim(),
+        password: data.password,
+      };
+      const response = await api.post('/auth/login', payload);
       const { access_token } = response.data;
       login(access_token);
       
@@ -148,8 +152,8 @@ const Login = () => {
             <button 
               type="button"
               onClick={() => {
-                document.getElementById('email').value = 'user@dealership.com';
-                document.getElementById('password').value = 'User@123!';
+                setValue('email', 'user@dealership.com', { shouldValidate: true });
+                setValue('password', 'User@123!', { shouldValidate: true });
               }}
               className="flex items-center justify-center gap-2 py-3 px-4 bg-white border border-gray-200 hover:border-gray-300 hover:bg-gray-50 rounded-xl text-sm font-bold text-gray-700 transition-colors shadow-sm"
             >
@@ -158,8 +162,8 @@ const Login = () => {
             <button 
               type="button"
               onClick={() => {
-                document.getElementById('email').value = 'admin@dealership.com';
-                document.getElementById('password').value = 'Admin@123!';
+                setValue('email', 'admin@dealership.com', { shouldValidate: true });
+                setValue('password', 'Admin@123!', { shouldValidate: true });
               }}
               className="flex items-center justify-center gap-2 py-3 px-4 bg-white border border-gray-200 hover:border-gray-300 hover:bg-gray-50 rounded-xl text-sm font-bold text-gray-700 transition-colors shadow-sm"
             >

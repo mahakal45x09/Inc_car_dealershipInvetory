@@ -18,10 +18,11 @@ const AdminDashboard = () => {
           api.get('/vehicles'),
           api.get('/metrics/admin').catch(() => ({ data: {} })) // fallback if metrics fail
         ]);
-        setVehicles(vehiclesRes.data);
-        setMetrics(metricsRes.data);
+        setVehicles(Array.isArray(vehiclesRes.data) ? vehiclesRes.data : []);
+        setMetrics(metricsRes.data || {});
       } catch (error) {
         console.error('Failed to fetch dashboard data', error);
+        setVehicles([]);
       } finally {
         setLoading(false);
       }

@@ -52,6 +52,7 @@ class PurchaseRepository:
     def get_history_by_user(self, user_id: int) -> list[PurchaseHistory]:
         """Get purchase history for a specific user."""
         from sqlalchemy.orm import joinedload
+
         return (
             self.db.query(PurchaseHistory)
             .options(joinedload(PurchaseHistory.vehicle))
@@ -59,4 +60,3 @@ class PurchaseRepository:
             .order_by(PurchaseHistory.id.desc())
             .all()
         )
-

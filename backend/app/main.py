@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api import auth, purchase, restock, vehicles, metrics, history
+from app.api import auth, history, metrics, purchase, restock, vehicles
 
 app = FastAPI(title="Car Dealership API")
 
@@ -24,4 +24,3 @@ app.include_router(history.router)
 @app.get("/")
 def read_root():
     return {"Hello": "World"}
-

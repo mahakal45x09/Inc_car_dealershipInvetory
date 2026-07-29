@@ -29,7 +29,9 @@ def test_access_with_valid_token(client):
     )
     token = login_res.json()["access_token"]
 
-    response = client.get("/api/purchase/history", headers={"Authorization": f"Bearer {token}"})
+    response = client.get(
+        "/api/purchase/history", headers={"Authorization": f"Bearer {token}"}
+    )
     assert response.status_code == 200
 
 
@@ -63,6 +65,8 @@ def test_token_belongs_to_deleted_user(client):
     # Use an ID that shouldn't exist
     token = create_access_token(data={"sub": "99999", "role": "USER"})
 
-    response = client.get("/api/purchase/history", headers={"Authorization": f"Bearer {token}"})
+    response = client.get(
+        "/api/purchase/history", headers={"Authorization": f"Bearer {token}"}
+    )
     assert response.status_code == 401
     assert response.json()["detail"] == "User not found"

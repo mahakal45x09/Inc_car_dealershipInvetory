@@ -15,7 +15,12 @@ const Register = () => {
   const onSubmit = async (data) => {
     try {
       setErrorMsg('');
-      await api.post('/auth/register', data);
+      const payload = {
+        full_name: data.full_name?.trim(),
+        email: data.email?.trim(),
+        password: data.password,
+      };
+      await api.post('/auth/register', payload);
       navigate('/login', { state: { message: 'Registration successful! Please login.' } });
     } catch (err) {
       setErrorMsg(err.response?.data?.detail || 'An error occurred during registration');

@@ -3,8 +3,7 @@ from typing import List, Optional
 
 from sqlalchemy.orm import Session
 
-from app.core.exceptions import (DuplicateVehicleException,
-                                 VehicleNotFoundException)
+from app.core.exceptions import DuplicateVehicleException, VehicleNotFoundException
 from app.models.vehicle import Vehicle
 from app.repositories.vehicle_repository import VehicleRepository
 from app.schemas.vehicle_schema import VehicleCreate, VehicleUpdate

@@ -2,12 +2,9 @@ from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 
-from app.core.dependencies import (get_current_admin, get_current_user,
-                                   get_vehicle_service)
-from app.core.exceptions import (DuplicateVehicleException,
-                                 VehicleNotFoundException)
-from app.schemas.vehicle_schema import (VehicleCreate, VehicleResponse,
-                                        VehicleUpdate)
+from app.core.dependencies import get_current_admin, get_vehicle_service
+from app.core.exceptions import DuplicateVehicleException, VehicleNotFoundException
+from app.schemas.vehicle_schema import VehicleCreate, VehicleResponse, VehicleUpdate
 from app.services.vehicle_service import VehicleService
 
 router = APIRouter(prefix="/api/vehicles", tags=["vehicles"])
