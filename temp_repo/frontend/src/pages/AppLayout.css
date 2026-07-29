@@ -1,0 +1,39 @@
+.app-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.app-layout-body {
+  display: flex;
+  flex: 1;
+  /* Navbar is sticky, so the body takes up the rest of the height */
+}
+
+.app-layout-content-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  /* Prevents content from overflowing the flex container */
+  min-width: 0; 
+  background-color: var(--color-bg-base);
+}
+
+.app-main-content {
+  flex: 1;
+  padding: 2rem;
+  /* Fade in animation for route changes */
+  animation: contentFadeIn var(--transition-normal);
+}
+
+@keyframes contentFadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsiveness */
+@media (max-width: 640px) {
+  .app-main-content {
+    padding: 1rem;
+  }
+}
