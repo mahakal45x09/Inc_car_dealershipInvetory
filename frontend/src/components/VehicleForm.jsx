@@ -72,19 +72,19 @@ const VehicleForm = ({ isOpen, onClose, onSubmit, initialData = null }) => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-1.5">
-                <label className="block text-sm font-bold text-gray-700">Make <span className="text-red-500">*</span></label>
-                <input type="text" {...register('make', { required: 'Make is required' })} className="w-full px-4 py-2.5 rounded-xl bg-gray-50 border border-gray-200 focus:bg-white focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all font-medium text-gray-900" placeholder="e.g. BMW" />
+                <label htmlFor="make" className="block text-sm font-bold text-gray-700">Make <span className="text-red-500">*</span></label>
+                <input id="make" type="text" {...register('make', { required: 'Make is required' })} className="w-full px-4 py-2.5 rounded-xl bg-gray-50 border border-gray-200 focus:bg-white focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all font-medium text-gray-900" placeholder="e.g. BMW" />
                 {errors.make && <span className="text-xs font-bold text-red-500">{errors.make.message}</span>}
               </div>
               <div className="space-y-1.5">
-                <label className="block text-sm font-bold text-gray-700">Model <span className="text-red-500">*</span></label>
-                <input type="text" {...register('model', { required: 'Model is required' })} className="w-full px-4 py-2.5 rounded-xl bg-gray-50 border border-gray-200 focus:bg-white focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all font-medium text-gray-900" placeholder="e.g. M4 Competition" />
+                <label htmlFor="model" className="block text-sm font-bold text-gray-700">Model <span className="text-red-500">*</span></label>
+                <input id="model" type="text" {...register('model', { required: 'Model is required' })} className="w-full px-4 py-2.5 rounded-xl bg-gray-50 border border-gray-200 focus:bg-white focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all font-medium text-gray-900" placeholder="e.g. M4 Competition" />
                 {errors.model && <span className="text-xs font-bold text-red-500">{errors.model.message}</span>}
               </div>
 
               <div className="space-y-1.5">
-                <label className="block text-sm font-bold text-gray-700">Category <span className="text-red-500">*</span></label>
-                <select {...register('category', { required: 'Category is required' })} className="w-full px-4 py-2.5 rounded-xl bg-gray-50 border border-gray-200 focus:bg-white focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all font-medium text-gray-900">
+                <label htmlFor="category" className="block text-sm font-bold text-gray-700">Category <span className="text-red-500">*</span></label>
+                <select id="category" {...register('category', { required: 'Category is required' })} className="w-full px-4 py-2.5 rounded-xl bg-gray-50 border border-gray-200 focus:bg-white focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all font-medium text-gray-900">
                   <option value="Luxury Sedans">Luxury Sedans</option>
                   <option value="Sports Cars">Sports Cars</option>
                   <option value="Electric SUVs">Electric SUVs</option>
@@ -97,12 +97,12 @@ const VehicleForm = ({ isOpen, onClose, onSubmit, initialData = null }) => {
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1.5">
-                  <label className="block text-sm font-bold text-gray-700">Price ($) <span className="text-red-500">*</span></label>
-                  <input type="number" step="0.01" {...register('price', { required: 'Price is required', min: 0 })} className="w-full px-4 py-2.5 rounded-xl bg-gray-50 border border-gray-200 focus:bg-white focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all font-medium text-gray-900" placeholder="0.00" />
+                  <label htmlFor="price" className="block text-sm font-bold text-gray-700">Price ($) <span className="text-red-500">*</span></label>
+                  <input id="price" type="number" step="0.01" {...register('price', { required: 'Price is required', min: 0 })} className="w-full px-4 py-2.5 rounded-xl bg-gray-50 border border-gray-200 focus:bg-white focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all font-medium text-gray-900" placeholder="0.00" />
                 </div>
                 <div className="space-y-1.5">
-                  <label className="block text-sm font-bold text-gray-700">Stock Qty <span className="text-red-500">*</span></label>
-                  <input type="number" {...register('quantity', { required: 'Quantity is required', min: 0 })} className="w-full px-4 py-2.5 rounded-xl bg-gray-50 border border-gray-200 focus:bg-white focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all font-medium text-gray-900" placeholder="0" />
+                  <label htmlFor="quantity" className="block text-sm font-bold text-gray-700">Stock Qty <span className="text-red-500">*</span></label>
+                  <input id="quantity" type="number" {...register('quantity', { required: 'Quantity is required', min: 0 })} className="w-full px-4 py-2.5 rounded-xl bg-gray-50 border border-gray-200 focus:bg-white focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all font-medium text-gray-900" placeholder="0" />
                 </div>
               </div>
             </div>

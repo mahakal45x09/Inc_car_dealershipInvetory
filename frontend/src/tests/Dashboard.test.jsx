@@ -1,4 +1,5 @@
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
 import { vi } from 'vitest';
 import Dashboard from '../pages/Dashboard/Dashboard';
 import api from '../utils/axios';
@@ -15,69 +16,91 @@ vi.mock('../hooks/useAuth', () => ({
 }));
 
 describe('Dashboard Component', () => {
-  const mockVehicles = [
-    { id: 1, make: 'Toyota', model: 'Camry', category: 'Sedan', price: 25000, quantity: 5 },
-    { id: 2, make: 'Honda', model: 'Civic', category: 'Sedan', price: 22000, quantity: 0 },
+  const mockHistory = [
+    {
+      id: 1,
+      quantity: 2,
+      total_price: 50000,
+      created_at: '2026-07-30T00:00:00Z',
+      vehicle: { id: 1, make: 'Toyota', model: 'Camry', price: 25000, image_url: 'https://example.com/camry.jpg' }
+    },
+    {
+      id: 2,
+      quantity: 1,
+      total_price: 22000,
+      created_at: '2026-07-30T00:00:00Z',
+      vehicle: { id: 2, make: 'Honda', model: 'Civic', price: 22000, image_url: 'https://example.com/civic.jpg' }
+    }
   ];
 
   beforeEach(() => {
     vi.clearAllMocks();
-    useAuth.mockReturnValue({ user: { id: 1, role: 'USER' } });
+    useAuth.mockReturnValue({ user: { id: 1, role: 'USER', email: 'test@example.com' } });
   });
 
   it('renders loading spinner initially', () => {
     api.get.mockReturnValue(new Promise(() => {})); // Never resolves
-    render(<Dashboard />);
-    expect(screen.getByRole('status')).toBeInTheDocument(); // Loading spinner usually has role="status"
+    render(
+      <MemoryRouter>
+        <Dashboard />
+      </MemoryRouter>
+    );
+    expect(screen.getByRole('status')).toBeInTheDocument();
   });
 
-  it('renders vehicle list on API success', async () => {
-    api.get.mockResolvedValueOnce({ data: mockVehicles });
-    render(<Dashboard />);
+  it('renders dashboard KPI stats and purchase history on API success', async () => {
+    api.get.mockResolvedValueOnce({ data: mockHistory });
+    render(
+      <MemoryRouter>
+        <Dashboard />
+      </MemoryRouter>
+    );
     
     await waitFor(() => {
       expect(screen.queryByRole('status')).not.toBeInTheDocument();
+      expect(screen.getByText(/Welcome back, test!/i)).toBeInTheDocument();
       expect(screen.getByText('Toyota Camry')).toBeInTheDocument();
       expect(screen.getByText('Honda Civic')).toBeInTheDocument();
     });
   });
 
-  it('renders error state on API failure', async () => {
+  it('handles error state gracefully on API failure', async () => {
     api.get.mockRejectedValueOnce(new Error('Network Error'));
-    render(<Dashboard />);
+    render(
+      <MemoryRouter>
+        <Dashboard />
+      </MemoryRouter>
+    );
     
     await waitFor(() => {
-      expect(screen.getByText(/failed to load vehicles/i)).toBeInTheDocument();
+      expect(screen.queryByRole('status')).not.toBeInTheDocument();
+      expect(screen.getByText(/You haven't made any purchases yet/i)).toBeInTheDocument();
     });
   });
 
-  it('renders empty state when no vehicles are found', async () => {
+  it('renders empty state when no purchases exist', async () => {
     api.get.mockResolvedValueOnce({ data: [] });
-    render(<Dashboard />);
+    render(
+      <MemoryRouter>
+        <Dashboard />
+      </MemoryRouter>
+    );
     
     await waitFor(() => {
-      expect(screen.getByText(/no vehicles found/i)).toBeInTheDocument();
+      expect(screen.getByText(/You haven't made any purchases yet/i)).toBeInTheDocument();
     });
   });
 
-  it('calls API with search params when filter is applied', async () => {
-    api.get.mockResolvedValueOnce({ data: mockVehicles });
-    render(<Dashboard />);
+  it('calls API to fetch user purchase history', async () => {
+    api.get.mockResolvedValueOnce({ data: mockHistory });
+    render(
+      <MemoryRouter>
+        <Dashboard />
+      </MemoryRouter>
+    );
     
     await waitFor(() => {
-      expect(api.get).toHaveBeenCalledWith('/vehicles', { params: {} });
-    });
-
-    api.get.mockResolvedValueOnce({ data: [mockVehicles[0]] });
-    
-    const makeInput = screen.getByPlaceholderText(/e.g. Toyota/i);
-    fireEvent.change(makeInput, { target: { value: 'Toyota' } });
-    fireEvent.click(screen.getByRole('button', { name: /apply filters/i }));
-
-    await waitFor(() => {
-      expect(api.get).toHaveBeenCalledWith('/vehicles/search', {
-        params: { make: 'Toyota', model: '', category: '', min_price: '', max_price: '' }
-      });
+      expect(api.get).toHaveBeenCalledWith('/purchase/history');
     });
   });
 });

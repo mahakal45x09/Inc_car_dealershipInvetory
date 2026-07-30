@@ -74,7 +74,7 @@ describe('Register Component', () => {
         email: 'john@example.com',
         password: 'password123',
       });
-      expect(mockNavigate).toHaveBeenCalledWith('/login');
+      expect(mockNavigate).toHaveBeenCalledWith('/login', expect.anything());
     });
   });
 

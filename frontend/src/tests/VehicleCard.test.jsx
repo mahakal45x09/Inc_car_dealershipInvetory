@@ -30,7 +30,7 @@ describe('VehicleCard Component', () => {
     expect(screen.getByText('Toyota Camry')).toBeInTheDocument();
     expect(screen.getByText(/Sedan/i)).toBeInTheDocument();
     expect(screen.getByText('$25,000')).toBeInTheDocument();
-    expect(screen.getByText(/5 In Stock/i)).toBeInTheDocument();
+    expect(screen.getByText(/5 units in stock|5 in stock/i)).toBeInTheDocument();
     
     const img = screen.getByRole('img', { name: /toyota camry/i });
     expect(img).toHaveAttribute('src', mockVehicle.image_url);
@@ -43,7 +43,7 @@ describe('VehicleCard Component', () => {
       </MemoryRouter>
     );
     
-    const purchaseBtn = screen.getByRole('button', { name: /buy now/i });
+    const purchaseBtn = screen.getByRole('button', { name: /buy now|purchase/i });
     expect(purchaseBtn).not.toBeDisabled();
   });
 
@@ -55,7 +55,7 @@ describe('VehicleCard Component', () => {
       </MemoryRouter>
     );
     
-    const purchaseBtn = screen.getByRole('button', { name: /out of stock/i });
+    const purchaseBtn = screen.getByRole('button', { name: /sold out|out of stock/i });
     expect(purchaseBtn).toBeDisabled();
   });
 

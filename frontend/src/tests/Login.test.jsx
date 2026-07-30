@@ -39,6 +39,8 @@ const renderWithProviders = (component) => {
   );
 };
 
+const VALID_JWT = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwicm9sZSI6InVzZXIifQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c';
+
 describe('Login Component', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -47,10 +49,10 @@ describe('Login Component', () => {
   it('renders login form correctly', () => {
     renderWithProviders(<Login />);
     
-    expect(screen.getByRole('heading', { name: /login/i })).toBeInTheDocument();
+    expect(screen.getByText(/Welcome back/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/password/i)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /login/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Sign In' })).toBeInTheDocument();
   });
 
   it('validates email input', async () => {
@@ -75,7 +77,7 @@ describe('Login Component', () => {
   });
 
   it('calls API on successful form submission', async () => {
-    api.post.mockResolvedValueOnce({ data: { access_token: 'fake-token' } });
+    api.post.mockResolvedValueOnce({ data: { access_token: VALID_JWT } });
     
     renderWithProviders(<Login />);
     
@@ -90,7 +92,7 @@ describe('Login Component', () => {
   });
 
   it('redirects on success', async () => {
-    api.post.mockResolvedValueOnce({ data: { access_token: 'fake-token' } });
+    api.post.mockResolvedValueOnce({ data: { access_token: VALID_JWT } });
     
     renderWithProviders(<Login />);
     

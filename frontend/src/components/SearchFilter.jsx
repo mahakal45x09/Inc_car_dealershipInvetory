@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Search, Filter, RefreshCw, Car, Type, DollarSign, Calendar, Fuel, Settings, CheckCircle } from 'lucide-react';
 
-const SearchFilter = ({ onFilterChange }) => {
+const SearchFilter = ({ onFilterChange, onSearch, onReset }) => {
   const emptyFilters = {
     make: '',
     model: '',
@@ -21,17 +21,22 @@ const SearchFilter = ({ onFilterChange }) => {
   const transmissions = ['Automatic', 'Manual'];
   const years = [2024, 2023, 2022, 2021, 2020];
 
+  const triggerFilter = (newFilters) => {
+    if (onFilterChange) onFilterChange(newFilters);
+    if (onSearch) onSearch(newFilters);
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     const newFilters = { ...filters, [name]: value };
     setFilters(newFilters);
-    // Live Search - trigger immediately on change
-    onFilterChange(newFilters);
+    triggerFilter(newFilters);
   };
 
   const handleReset = () => {
     setFilters(emptyFilters);
-    onFilterChange(emptyFilters);
+    triggerFilter(emptyFilters);
+    if (onReset) onReset();
   };
 
   return (

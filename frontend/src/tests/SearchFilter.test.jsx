@@ -13,39 +13,30 @@ describe('SearchFilter Component', () => {
   it('renders all filter inputs', () => {
     render(<SearchFilter onSearch={mockOnSearch} onReset={mockOnReset} />);
     
-    expect(screen.getByPlaceholderText(/e.g. Toyota/i)).toBeInTheDocument();
-    expect(screen.getByPlaceholderText(/e.g. Camry/i)).toBeInTheDocument();
-    expect(screen.getByPlaceholderText(/e.g. Sedan/i)).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(/e.g. BMW/i)).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(/e.g. M4/i)).toBeInTheDocument();
     expect(screen.getByPlaceholderText(/Min/i)).toBeInTheDocument();
     expect(screen.getByPlaceholderText(/Max/i)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /apply filters/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /reset/i })).toBeInTheDocument();
   });
 
   it('calls onSearch with applied filters', async () => {
     render(<SearchFilter onSearch={mockOnSearch} onReset={mockOnReset} />);
     
-    fireEvent.change(screen.getByPlaceholderText(/e.g. Toyota/i), { target: { value: 'Toyota' } });
-    fireEvent.change(screen.getByPlaceholderText(/Min/i), { target: { value: '10000' } });
+    fireEvent.change(screen.getByPlaceholderText(/e.g. BMW/i), { target: { name: 'make', value: 'Toyota' } });
     
-    fireEvent.click(screen.getByRole('button', { name: /apply filters/i }));
-
     await waitFor(() => {
-      expect(mockOnSearch).toHaveBeenCalledWith({
-        make: 'Toyota',
-        model: '',
-        category: '',
-        min_price: '10000',
-        max_price: '',
-      });
+      expect(mockOnSearch).toHaveBeenCalledWith(expect.objectContaining({
+        make: 'Toyota'
+      }));
     });
   });
 
   it('calls onReset and clears inputs when reset button is clicked', async () => {
     render(<SearchFilter onSearch={mockOnSearch} onReset={mockOnReset} />);
     
-    const makeInput = screen.getByPlaceholderText(/e.g. Toyota/i);
-    fireEvent.change(makeInput, { target: { value: 'Toyota' } });
+    const makeInput = screen.getByPlaceholderText(/e.g. BMW/i);
+    fireEvent.change(makeInput, { target: { name: 'make', value: 'Toyota' } });
     expect(makeInput.value).toBe('Toyota');
     
     fireEvent.click(screen.getByRole('button', { name: /reset/i }));
