@@ -64,6 +64,20 @@ def get_vehicle(
         raise HTTPException(status_code=404, detail=str(e))
 
 
+@router.patch("/{vehicle_id}/quantity", response_model=VehicleResponse)
+def update_vehicle_quantity(
+    vehicle_id: int,
+    quantity: int = Query(..., ge=0, description="New quantity for the vehicle"),
+    service: VehicleService = Depends(get_vehicle_service),
+    admin=Depends(get_current_admin),
+):
+    """Update vehicle inventory quantity. Admin only."""
+    try:
+        return service.update_vehicle(vehicle_id, VehicleUpdate(quantity=quantity))
+    except VehicleNotFoundException as e:
+        raise HTTPException(status_code=404, detail=str(e))
+
+
 @router.put("/{id}", response_model=VehicleResponse)
 def update_vehicle(
     id: int,
