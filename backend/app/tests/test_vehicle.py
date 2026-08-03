@@ -1,3 +1,5 @@
+from sqlalchemy.dialects.mssql import json
+from fastapi import responses
 from fastapi.testclient import TestClient
 
 
@@ -177,3 +179,16 @@ def test_duplicate_vehicle(client: TestClient):
     client.post("/api/vehicles", json=payload, headers=headers)
     response = client.post("/api/vehicles", json=payload, headers=headers)
     assert response.status_code == 400
+
+def test_update_stock(client,admin_token):
+    response = client.put(
+        "/api/vehicles/1",
+        headers={
+            "Authorization":f"Bearer{admin_token}"
+        },
+        json = {
+            "quantity":10
+        }
+    )
+ 
+    assert response.status_code == 200

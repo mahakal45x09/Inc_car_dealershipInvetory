@@ -1,135 +1,12 @@
-TDD Kata: Car Dealership Inventory System
-
-Objective
-
-The goal of this kata is to design, build, and test a full-stack Car Dealership Inventory System. This project will test your skills in API development, database management, frontend implementation, testing, and modern development workflows, including the use of AI tools.
-
-Core Requirements
-
-1. Backend API (RESTful)
-
-You are to build a robust backend API that will serve as the brain of the application.
-
-· Technology: Choose one of the following: Node.js/TypeScript (with Express/NestJS), Python (with Django/FastAPI), or Ruby (with Rails).
-
-· Database: The application must connect to a database (e.g., PostgreSQL, MongoDB, SQLite). An in-memory database is not sufficient.
-
-· User Authentication:
-
-· Users must be able to register and log in.
-
-· Implement token-based authentication (e.g., JWT) to secure certain API endpoints.
-
-· API Endpoints:
-
-· Auth: POST /api/auth/register, POST /api/auth/login
-
-· Vehicles (Protected):
-
-· POST /api/vehicles: Add a new vehicle.
-
-· GET /api/vehicles: View a list of all available vehicles.
-
-· GET /api/vehicles/search: Search for vehicles by make, model, category, or price range.
-
-· PUT /api/vehicles/:id: Update a vehicle's details.
-
-· DELETE /api/vehicles/:id: Delete a vehicle (Admin only).
-
-· Inventory (Protected):
-
-· POST /api/vehicles/:id/purchase: Purchase a vehicle, decreasing its quantity.
-
-· POST /api/vehicles/:id/restock: Restock a vehicle, increasing its quantity (Admin only).
-
-Each vehicle must have a unique ID, make, model, category, price, and quantity in stock.
-
-2. Frontend Application
-
-You must build a modern, single-page application (SPA) to interact with your backend API.
-
-· Technology: You must use HTML5, CSS3, Tailwind, and React
-
-· Functionality:
-
-· User registration and login forms.
-
-· A dashboard or homepage to display all available vehicles.
-
-· Functionality to search and filter vehicles.
-
-· A "Purchase" button on each vehicle, which should be disabled if the quantity is zero.
-
-· (For Admin Users) Forms/UI to add, update, and delete vehicles.
-
-· Design: This is a chance to show your creativity. The application should be visually appealing, responsive, and provide a great user experience.
-
-Process & Technical Guidelines
-
-1. Test-Driven Development (TDD)
-
-Write tests before implementing functionality. We expect to see a clear "Red-Green-Refactor" pattern in your commit history, especially for the backend logic. Aim for high test coverage with meaningful test cases.
-
-2. Clean Coding Practices
-
-Write clean, readable, and maintainable code. Follow SOLID principles and other best practices in software design. Your code should be well-documented with meaningful comments and clear naming conventions.
-
-3. Git & Version Control
-
-Use Git for version control. Commit your changes frequently with clear, descriptive messages that narrate your development journey.
-
-4. AI Usage Policy (Important)
-
-We believe AI is a critical tool in the modern software development lifecycle. You are encouraged and expected to use AI tools. However, you must be transparent about it.
-
-· AI Co-authorship: For every commit where you used an AI tool (for generating boilerplate, writing tests, debugging, etc.), you must add the AI as a co-author.
-
-How to add a co-author: At the end of your commit message, add two empty lines, followed by the co-author trailer.
-
-git commit -m "feat: Implement user registration endpoint Used an AI assistant to generate the initial boilerplate for the controller and service, then manually added validation logic. Co-authored-by: AI Tool Name <AI@users.noreply.github.com>"
-
-· README Documentation: Your README.md file must include a detailed section titled "My AI Usage". In this section, you must describe:
-
-· Which AI tools you used (e.g., GitHub Copilot, ChatGPT, Gemini, etc.).
-
-· How you used them (e.g., "I used Gemini to brainstorm API endpoint structures," or "I asked Copilot to generate unit tests for my service layer").
-
-· Your reflection on how AI impacted your workflow.
-
-· Interview Discussion: Be prepared to discuss your AI usage in detail during the interview. We are interested in how you leverage these tools effectively and responsibly.
-
-Deliverables
-
-· A public Git repository link (e.g., on GitHub, GitLab).
-
-· A comprehensive README.md file that includes:
-
-· A clear explanation of the project.
-
-· Detailed instructions on how to set up and run the project locally (both backend and frontend).
-
-· Screenshots of your final application in action.
-
-· The mandatory "My AI Usage" section.
-
-· A test report showing the results of your test suite.
-
-· A PROMPTS.md file that contains your entire AI tooling chat history (including the prompts you wrote) in the root folder of the project.
-
-· (Optional - Brownie Points) A link to the deployed, live application on a platform like Vercel, Netlify, Heroku, or AWS.
-
-Note: Plagiarism is strictly forbidden. While we encourage AI assistance, submitting code copied from other repositories or developers will result in immediate rejection. We want to see your work, augmented by modern tools.
-
-
 # TDD Progress Log
-## Phase 3.1: User Registration (RED Phase)
+## Phase 1: User Registration (RED Phase)
 The following test cases were written and **FAILED** initially (as expected) due to missing endpoints/logic:
 - ❌ Register new user (`404 Not Found`)
 - ❌ Duplicate email (`404 Not Found`)
 - ❌ Invalid email (`404 Not Found`)
 - ❌ Password too short (`404 Not Found`)
 - ❌ Missing fields (`404 Not Found`)
-## Phase 3.2: User Registration (GREEN Phase)
+## Phase 2: User Registration (GREEN Phase)
 The following test cases **PASSED** after implementing the User Model, User Schema, Password Hashing, User Repository, User Service, and Auth API:
 - ✅ Register new user
 - ✅ Duplicate email
@@ -138,7 +15,7 @@ The following test cases **PASSED** after implementing the User Model, User Sche
 - ✅ Missing fields
 All 5 tests are now successfully passing (`100%`).
 
-## Phase 4.1: User Login (RED Phase)
+## Phase 3: User Login (RED Phase)
 The following test cases were written and **FAILED** initially due to missing login endpoints/logic:
 - ❌ Successful Login (`404 Not Found`)
 - ❌ Wrong Password (`404 Not Found`)
@@ -147,7 +24,7 @@ The following test cases were written and **FAILED** initially due to missing lo
 - ❌ Empty Password (`404 Not Found`)
 - ❌ JWT Token Returned (`404 Not Found`)
 
-## Phase 4.2: User Login (GREEN Phase)
+## Phase 4: User Login (GREEN Phase)
 The following test cases **PASSED** after implementing JWT utilities, LoginRequest schema, AuthService login logic, and the POST /login API route:
 - ✅ Successful Login
 - ✅ Wrong Password
@@ -157,7 +34,7 @@ The following test cases **PASSED** after implementing JWT utilities, LoginReque
 - ✅ JWT Token Returned
 All 6 tests are now successfully passing (`100%`).
 
-## Phase 5.1: JWT Authentication (RED Phase)
+## Phase 5: JWT Authentication (RED Phase)
 The following test cases were written and **FAILED** initially because the protected routes lacked authentication logic:
 - ❌ Access Protected Route Without Token (`404 Not Found`)
 - ❌ Access Protected Route With Invalid Token (`404 Not Found`)
@@ -167,7 +44,7 @@ The following test cases were written and **FAILED** initially because the prote
 - ❌ Missing Bearer Prefix (`404 Not Found`)
 - ❌ Token Belongs to Deleted User (`404 Not Found`)
 
-## Phase 5.2: JWT Authentication (GREEN Phase)
+## Phase 6: JWT Authentication (GREEN Phase)
 The following test cases **PASSED** after implementing the `get_current_user` dependency, strict JWT validation in `core/jwt.py`, and querying `UserRepository`:
 - ✅ Access Protected Route Without Token
 - ✅ Access Protected Route With Invalid Token
@@ -178,7 +55,7 @@ The following test cases **PASSED** after implementing the `get_current_user` de
 - ✅ Token Belongs to Deleted User
 All 7 tests are now successfully passing (`100%`).
 
-## Phase 6.1: Vehicle CRUD API (RED Phase)
+## Phase 7: Vehicle CRUD API (RED Phase)
 The following test cases were written and **FAILED** initially because the vehicle routes and models did not exist:
 - ❌ Add Vehicle (`404 Not Found`)
 - ❌ Normal User Cannot Add Vehicle (`404 Not Found`)
@@ -193,7 +70,7 @@ The following test cases were written and **FAILED** initially because the vehic
 - ❌ Validation Quantity (`404 Not Found`)
 - ❌ Duplicate Vehicle (`404 Not Found`)
 
-## Phase 6.2: Vehicle CRUD API (GREEN Phase)
+## Phase 8: Vehicle CRUD API (GREEN Phase)
 The following test cases **PASSED** after implementing the `Vehicle` model, `VehicleSchema`, `VehicleRepository`, `VehicleService`, and the API routes:
 - ✅ Add Vehicle (Admin Only)
 - ✅ Normal User Cannot Add Vehicle
@@ -209,7 +86,7 @@ The following test cases **PASSED** after implementing the `Vehicle` model, `Veh
 - ✅ Duplicate Vehicle (Returns 400)
 All 12 tests are now successfully passing (`100%`).
 
-## Phase 7.1: Vehicle Search API (RED Phase)
+## Phase 9: Vehicle Search API (RED Phase)
 The following test cases were written and **FAILED** initially because the `/api/vehicles/search` endpoint and query parameters did not exist:
 - ❌ Search by Make
 - ❌ Search by Model
@@ -222,7 +99,7 @@ The following test cases were written and **FAILED** initially because the `/api
 - ❌ No Result
 - ❌ Invalid Price
 
-## Phase 7.2: Vehicle Search API (GREEN Phase)
+## Phase 10: Vehicle Search API (GREEN Phase)
 The following test cases **PASSED** after implementing dynamic SQL query filtering in `VehicleRepository`, robust validation using FastAPI's `Query` parameters, and the new `/search` API route:
 - ✅ Search by Make
 - ✅ Search by Model
@@ -237,7 +114,7 @@ The following test cases **PASSED** after implementing dynamic SQL query filteri
 All 10 tests are now successfully passing (`100%`).
 
 
-## Phase 8.1: Purchase Vehicle API (RED Phase)
+## Phase 11: Purchase Vehicle API (RED Phase)
 The following test cases were written and **FAILED** initially because the /api/vehicles/{id}/purchase endpoint and logic did not exist:
 - ❌ Purchase Vehicle Successfully
 - ❌ Vehicle Not Found
@@ -252,7 +129,7 @@ The following test cases were written and **FAILED** initially because the /api/
 - ❌ Transaction Rollback
 - ❌ Total Price Calculation
 
-## Phase 8.2: Purchase Vehicle API (GREEN Phase)
+## Phase 12: Purchase Vehicle API (GREEN Phase)
 The following test cases **PASSED** after implementing the PurchaseHistory model, PurchaseService, PurchaseRepository, Row-level database locking (with_for_update()), and the new API route:
 - ✅ Purchase Vehicle Successfully
 - ✅ Vehicle Not Found (Returns 404)
@@ -268,7 +145,7 @@ The following test cases **PASSED** after implementing the PurchaseHistory model
 - ✅ Total Price Calculation
 All 12 tests are now successfully passing (100%).
 
-## Phase 9.1: Restock Vehicle API (RED Phase)
+## Phase 13: Restock Vehicle API (RED Phase)
 The following test cases were written and **FAILED** initially because the /api/vehicles/{id}/restock endpoint and logic did not exist:
 - ❌ Admin Can Restock Vehicle
 - ❌ Normal User Cannot Restock
@@ -283,7 +160,7 @@ The following test cases were written and **FAILED** initially because the /api/
 - ❌ Large Quantity
 - ❌ Response Validation
 
-## Phase 9.2: Restock Vehicle API (GREEN Phase)
+## Phase 14: Restock Vehicle API (GREEN Phase)
 The following test cases **PASSED** after implementing the RestockHistory model, RestockService, RestockRepository, and the new API route protected by get_current_admin:
 - ✅ Admin Can Restock Vehicle
 - ✅ Normal User Cannot Restock (Returns 403 Forbidden)
@@ -299,7 +176,7 @@ The following test cases **PASSED** after implementing the RestockHistory model,
 - ✅ Response Validation
 All 12 tests are now successfully passing (100%).
 
-## Phase 10.1: Role-Based Authorization (RBAC) (RED Phase)
+## Phase 15: Role-Based Authorization (RBAC) (RED Phase)
 The following test cases were written and **FAILED** initially because the authorization checks relied on a hardcoded email rather than JWT role checking:
 - ❌ User Can View Vehicles
 - ❌ Admin Can View Vehicles
@@ -316,7 +193,7 @@ The following test cases were written and **FAILED** initially because the autho
 - ❌ Expired Admin Token
 - ❌ Deleted Admin
 
-## Phase 10.2: Role-Based Authorization (RBAC) (GREEN & REFACTOR Phase)
+## Phase 16: Role-Based Authorization (RBAC) (GREEN & REFACTOR Phase)
 The following test cases **PASSED** after baking the 
 ole into the User model and AuthService token generation, and refactoring get_current_admin to use a generic RoleChecker dependency class:
 - ✅ User Can View Vehicles
@@ -336,7 +213,7 @@ ole into the User model and AuthService token generation, and refactoring get_cu
 All 14 tests are now successfully passing (100%).
 
 
-## Phase 11: Backend Testing, Coverage & Quality (TDD Finalization)
+## Phase 17: Backend Testing, Coverage & Quality (TDD Finalization)
 The backend test suite is completely GREEN, achieving 97.5% coverage. CI workflow is set up and all code quality checks (flake8, mypy, black, isort) are passing. ✅
 
 ### Test Coverage Report
@@ -420,7 +297,9 @@ The following test cases were written and **FAILED** initially because the Regis
 - ❌ displays error message on duplicate email
 
 ## Phase 12.2: Register Page Frontend (GREEN & REFACTOR Phase)
-The following test cases **PASSED** after implementing the Register component with eact-hook-form, eact-router-dom, comprehensive validation, toast notifications, loading spinners, and updating the UI with rich aesthetics matching the Login page:
+The following test cases **PASSED** after implementing the Register component with 
+eact-hook-form, 
+eact-router-dom, comprehensive validation, toast notifications, loading spinners, and updating the UI with rich aesthetics matching the Login page:
 - ✅ renders register form correctly
 - ✅ validates required inputs
 - ✅ calls API and redirects on successful registration
@@ -488,7 +367,8 @@ The following test cases for AdminDashboard and AdminVehicleForm **PASSED**:
 All requested UI pages and features (Home, Login, Register, User Dashboard, Search, Purchase Flow, Admin Dashboard, CRUD Operations) have been implemented, fully tested, and are responsive! ✅
 
 ## UI Redesign & Dashboard Enhancement (Completed)
-- Integrated echarts for rich data visualization on the Admin Dashboard.
+- Integrated 
+echarts for rich data visualization on the Admin Dashboard.
 - Implemented global Sidebar navigation, replacing the legacy Navbar.
 - Added **Purchase History** view for Users.
 - Enhanced Dashboard layout with left-aligned filters and dynamic hero sections.

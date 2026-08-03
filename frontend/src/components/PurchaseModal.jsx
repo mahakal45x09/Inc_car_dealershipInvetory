@@ -39,10 +39,19 @@ const PurchaseModal = ({ vehicle, onClose, onSuccess }) => {
     }
   };
 
+  const isDiscounted = quantity > 1;
+  const rawTotalAmount = vehicle.price * quantity;
+  const finalTotalAmount = isDiscounted ? rawTotalAmount * 0.8 : rawTotalAmount;
+
   const totalPrice = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD'
-  }).format(vehicle.price * quantity);
+  }).format(finalTotalAmount);
+
+  const rawTotalPrice = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD'
+  }).format(rawTotalAmount);
 
   return (
     <AnimatePresence>
@@ -155,12 +164,26 @@ const PurchaseModal = ({ vehicle, onClose, onSuccess }) => {
                   </div>
                 </div>
 
-                <div className="bg-gray-50 rounded-2xl p-5 border border-gray-100 flex justify-between items-center">
-                  <div>
-                    <p className="text-sm font-semibold text-gray-500 mb-1">Total Payment</p>
-                    <p className="text-3xl font-extrabold text-gray-900 tracking-tight">{totalPrice}</p>
+                <div className="bg-gray-50 rounded-2xl p-5 border border-gray-100 space-y-2">
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <p className="text-sm font-semibold text-gray-500 mb-1">Total Payment</p>
+                        {isDiscounted && (
+                          <span className="px-2 py-0.5 text-xs font-bold text-green-700 bg-green-100 rounded-full flex items-center gap-1">
+                            🎉 20% Bulk Discount Applied!
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex items-baseline gap-3">
+                        <p className="text-3xl font-extrabold text-gray-900 tracking-tight">{totalPrice}</p>
+                        {isDiscounted && (
+                          <p className="text-sm text-gray-400 line-through font-semibold">{rawTotalPrice}</p>
+                        )}
+                      </div>
+                    </div>
+                    <ShieldCheck className="w-10 h-10 text-gray-300" />
                   </div>
-                  <ShieldCheck className="w-10 h-10 text-gray-300" />
                 </div>
               </div>
 

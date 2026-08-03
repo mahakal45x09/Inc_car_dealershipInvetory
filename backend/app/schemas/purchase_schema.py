@@ -9,6 +9,8 @@ class PurchaseResponse(BaseModel):
     message: str
     vehicle_id: int
     remaining_quantity: int
+    total_price: float
+    discount_applied: bool = False
 
 
 class VehicleBase(BaseModel):

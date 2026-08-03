@@ -167,3 +167,21 @@ def test_total_price_calculation(client: TestClient, setup_data):
         f"/api/vehicles/{v1_id}/purchase", json={"quantity": 2}, headers=headers
     )
     assert response.status_code == 200
+    data = response.json()
+    # v1_id price is 50000.0. For 2 vehicles: 50000.0 * 2 * 0.8 = 80000.0
+    assert data["total_price"] == 80000.0
+    assert data["discount_applied"] is True
+
+
+def test_purchase_single_vehicle_no_discount(client: TestClient, setup_data):
+    headers = get_auth_headers(client, is_admin=False)
+    v1_id = setup_data["v1_id"]
+    response = client.post(
+        f"/api/vehicles/{v1_id}/purchase", json={"quantity": 1}, headers=headers
+    )
+    assert response.status_code == 200
+    data = response.json()
+    # v1_id price is 50000.0. For 1 vehicle: 50000.0 * 1 = 50000.0 (no discount)
+    assert data["total_price"] == 50000.0
+    assert data["discount_applied"] is False
+

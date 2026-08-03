@@ -39,8 +39,14 @@ class PurchaseService:
                     detail="Insufficient stock available",
                 )
 
-            # Business logic calculations
-            total_price = float(vehicle.price) * request.quantity
+            # Business logic calculations: Apply 20% discount if purchasing more than 1 vehicle
+            raw_total = float(vehicle.price) * request.quantity
+            discount_applied = request.quantity > 1
+            if discount_applied:
+                total_price = round(raw_total * 0.80, 2)  # 20% discount
+            else:
+                total_price = round(raw_total, 2)
+
             remaining_quantity = int(vehicle.quantity) - request.quantity
 
             # Persist changes
@@ -51,12 +57,15 @@ class PurchaseService:
             self.repository.commit()
 
             logger.info(
-                f"User {user_id} successfully purchased {request.quantity}x of vehicle {vehicle_id}. Total: ${total_price}"
+                f"User {user_id} successfully purchased {request.quantity}x of vehicle {vehicle_id}. "
+                f"Total: ${total_price} (Discount applied: {discount_applied})"
             )
             return PurchaseResponse(
                 message="Vehicle purchased successfully",
                 vehicle_id=vehicle_id,
                 remaining_quantity=int(remaining_quantity),
+                total_price=float(total_price),
+                discount_applied=discount_applied,
             )
         except HTTPException:
             self.repository.rollback()
